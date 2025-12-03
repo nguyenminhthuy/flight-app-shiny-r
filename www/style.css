@@ -1,0 +1,15 @@
+/* chỉnh size chữ của brand + menu tabs */
+.navbar-nav > li > a,
+.navbar-brand {
+  font-size: 18px !important;
+  padding-top: 15px !important;
+  padding-bottom: 15px !important;
+}
+
+/* canh đều trái/phải */
+.navbar-nav > li > a {
+  padding-left: 20px !important;
+  padding-right: 20px !important;
+}
+      
+      
