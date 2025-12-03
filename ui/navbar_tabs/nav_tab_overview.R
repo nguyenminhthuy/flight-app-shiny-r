@@ -29,12 +29,144 @@ nav_tab_overview <- function() {
           
           tabPanel(
             title = tagList(icon("table"), "Data Description"),
-            p(),
-            tags$div(class = "about-card",
-                     tags$h3("Overall Dataset"),
-                     
-            ), 
-            verbatimTextOutput("tabset1Selected")
+            br(),
+            h4("General"),
+            layout_columns(
+              card(
+                card_header(
+                  style = "bg-info color: white; text-align: center; 
+                            font-weight: bold; padding: 5px; margin: 0;",
+                  bsicons::bs_icon("airplane", size = "1em", style = "color: white;"),
+                  "Total Flights",
+                ),
+                card_body(
+                  div(
+                    style = "color: #18bc9c; text-align: center; font-size: 30px; font-weight: bold",
+                    textOutput("lb_totalFlights", container = span)
+                  )
+                )
+              ),
+              card(
+                card_header(
+                  style = "bg-info color: white; text-align: center; 
+                            font-weight: bold; padding: 5px; margin: 0;",
+                  bsicons::bs_icon("airplane", size = "1em", style = "color: white;"),
+                  "Number of Airlines",
+                ),
+                card_body(
+                  div(
+                    style = "color: #18bc9c; text-align: center; font-size: 30px; font-weight: bold",
+                    textOutput("lb_airlines", container = span)
+                  )
+                )
+              )
+            ),
+            br(),
+            h4("Flight Status"),
+            layout_columns(
+              card(
+                card_header(
+                  style = "bg-info color: white; text-align: center; 
+                            font-weight: bold; padding: 5px; margin: 0;",
+                  bsicons::bs_icon("airplane", size = "1em", style = "color: white;"),
+                  "Number of flights delayed",
+                ),
+                card_body(
+                  div(
+                    style = "color: #18bc9c; text-align: center; font-size: 30px; font-weight: bold",
+                    textOutput("lb_delayFlights", container = span)
+                  )
+                )
+              ),
+              card(
+                card_header(
+                  style = "bg-info color: white; text-align: center; 
+                            font-weight: bold; padding: 5px; margin: 0;",
+                  bsicons::bs_icon("airplane", size = "1em", style = "color: white;"),
+                  "Number of on-time flights",
+                ),
+                card_body(
+                  div(
+                    style = "color: #18bc9c; text-align: center; font-size: 30px; font-weight: bold",
+                    textOutput("lb_ontimeFlights", container = span)
+                  )
+                )
+              ),
+              card(
+                card_header(
+                  style = "bg-info color: white; text-align: center; 
+                            font-weight: bold; padding: 5px; margin: 0;",
+                  bsicons::bs_icon("airplane", size = "1em", style = "color: white;"),
+                  "Number of flights cancelled",
+                ),
+                card_body(
+                  div(
+                    style = "color: #18bc9c; text-align: center; font-size: 30px; font-weight: bold",
+                    textOutput("lb_cancelFlights", container = span)
+                  )
+                )
+              ),
+              card(
+                card_header(
+                  style = "bg-info color: white; text-align: center; 
+                            font-weight: bold; padding: 5px; margin: 0;",
+                  bsicons::bs_icon("airplane", size = "1em", style = "color: white;"),
+                  "Number of flights diverted",
+                ),
+                card_body(
+                  div(
+                    style = "color: #18bc9c; text-align: center; font-size: 30px; font-weight: bold",
+                    textOutput("lb_divertFlights", container = span)
+                  )
+                )
+              )
+            ),
+            br(),
+            h4("Distance Category"),
+            layout_columns(
+              card(
+                card_header(
+                  style = "bg-info color: white; text-align: center; 
+                            font-weight: bold; padding: 5px; margin: 0;",
+                  bsicons::bs_icon("airplane", size = "1em", style = "color: white;"),
+                  "Number of short-haul flights",
+                ),
+                card_body(
+                  div(
+                    style = "color: #18bc9c; text-align: center; font-size: 30px; font-weight: bold",
+                    textOutput("lb_short", container = span)
+                  )
+                )
+              ),
+              card(
+                card_header(
+                  style = "bg-info color: white; text-align: center; 
+                            font-weight: bold; padding: 5px; margin: 0;",
+                  bsicons::bs_icon("airplane", size = "1em", style = "color: white;"),
+                  "Number of medium-haul flights",
+                ),
+                card_body(
+                  div(
+                    style = "color: #18bc9c; text-align: center; font-size: 30px; font-weight: bold",
+                    textOutput("lb_medium", container = span)
+                  )
+                )
+              ),
+              card(
+                card_header(
+                  style = "bg-info color: white; text-align: center; 
+                            font-weight: bold; padding: 5px; margin: 0;",
+                  bsicons::bs_icon("airplane", size = "1em", style = "color: white;"),
+                  "Number of long-haul flights",
+                ),
+                card_body(
+                  div(
+                    style = "color: #18bc9c; text-align: center; font-size: 30px; font-weight: bold",
+                    textOutput("lb_long", container = span)
+                  )
+                )
+              )
+            )
           ),
           
           tabPanel(
@@ -46,142 +178,12 @@ nav_tab_overview <- function() {
           tabPanel(
             title = tagList(icon("chart-bar"), "Visualize"),
             p(),
-            layout_columns(
-              #valueBoxOutput("n_flights_box"),
-              card(
-                card_header(
-                  style = "background-color: #007BFF; color: white; text-align: center; 
-                            font-weight: bold; padding: 5px; margin: 0;",
-                  bsicons::bs_icon("airplane", size = "1em", style = "color: white;"),
-                  "Total Flights",
-                ),
-                card_body(
-                  div(
-                    style = "text-align: center; font-size: 20px; font-weight: bold;",
-                    format(stats$n_flights, big.mark = ",", scientific = FALSE)
-                  )
-                )
-              ),
-              card(
-                card_header(
-                  style = "background-color: #007BFF; color: white; text-align: center; 
-                            font-weight: bold; padding: 5px; margin: 0;",
-                  bsicons::bs_icon("airplane", size = "1em", style = "color: white;"),
-                  "Total Flights",
-                ),
-                card_body(
-                  div(
-                    style = "text-align: center; font-size: 20px; font-weight: bold;",
-                    format(stats$n_flights, big.mark = ",", scientific = FALSE)
-                  )
-                )
-              ),
-              card(
-                card_header(
-                  style = "background-color: #007BFF; color: white; text-align: center; 
-                            font-weight: bold; padding: 5px; margin: 0;",
-                  bsicons::bs_icon("airplane", size = "1em", style = "color: white;"),
-                  "Total Flights",
-                ),
-                card_body(
-                  div(
-                    style = "text-align: center; font-size: 20px; font-weight: bold;",
-                    format(stats$n_flights, big.mark = ",", scientific = FALSE)
-                  )
-                )
-              )
-            ),
-            layout_columns(
-              #valueBoxOutput("n_flights_box"),
-              card(
-                card_header(
-                  style = "background-color: #007BFF; color: white; text-align: center; 
-                            font-weight: bold; padding: 5px; margin: 0;",
-                  bsicons::bs_icon("airplane", size = "1em", style = "color: white;"),
-                  "Total Flights",
-                ),
-                card_body(
-                  div(
-                    style = "text-align: center; font-size: 20px; font-weight: bold;",
-                    format(stats$n_flights, big.mark = ",", scientific = FALSE)
-                  )
-                )
-              ),
-              card(
-                card_header(
-                  style = "background-color: #007BFF; color: white; text-align: center; 
-                            font-weight: bold; padding: 5px; margin: 0;",
-                  bsicons::bs_icon("airplane", size = "1em", style = "color: white;"),
-                  "Total Flights",
-                ),
-                card_body(
-                  div(
-                    style = "text-align: center; font-size: 20px; font-weight: bold;",
-                    format(stats$n_flights, big.mark = ",", scientific = FALSE)
-                  )
-                )
-              ),
-              card(
-                card_header(
-                  style = "background-color: #007BFF; color: white; text-align: center; 
-                            font-weight: bold; padding: 5px; margin: 0;",
-                  bsicons::bs_icon("airplane", size = "1em", style = "color: white;"),
-                  "Total Flights",
-                ),
-                card_body(
-                  div(
-                    style = "text-align: center; font-size: 20px; font-weight: bold;",
-                    format(stats$n_flights, big.mark = ",", scientific = FALSE)
-                  )
-                )
-              )
-            ),
-            layout_columns(
-              #valueBoxOutput("n_flights_box"),
-              card(
-                card_header(
-                  style = "background-color: #007BFF; color: white; text-align: center; 
-                            font-weight: bold; padding: 5px; margin: 0;",
-                  bsicons::bs_icon("airplane", size = "1em", style = "color: white;"),
-                  "Total Flights",
-                ),
-                card_body(
-                  div(
-                    style = "text-align: center; font-size: 20px; font-weight: bold;",
-                    format(stats$n_flights, big.mark = ",", scientific = FALSE)
-                  )
-                )
-              ),
-              card(
-                card_header(
-                  style = "background-color: #007BFF; color: white; text-align: center; 
-                          font-weight: bold; padding: 5px; margin: 0;",
-                  bsicons::bs_icon("airplane", size = "1em", style = "color: white;"),
-                  "Total Flights",
-                ),
-                card_body(
-                  div(
-                    style = "text-align: center; font-size: 20px; font-weight: bold;",
-                    format(stats$n_flights, big.mark = ",", scientific = FALSE)
-                  )
-                )
-              ),
-              card(
-                card_header(
-                  style = "background-color: #007BFF; color: white; text-align: center; 
-                            font-weight: bold; padding: 5px; margin: 0;",
-                  bsicons::bs_icon("airplane", size = "1em", style = "color: white;"),
-                  "Total Flights",
-                ),
-                card_body(
-                  div(
-                    style = "text-align: center; font-size: 20px; font-weight: bold;",
-                    format(stats$n_flights, big.mark = ",", scientific = FALSE)
-                  )
-                )
-              )
-            )
+            tags$div(class = "about-card",
+                     tags$h3("Overall Dataset")
+            ), 
+            verbatimTextOutput("tabset1Selected")
           )
+          
         )
       )
     )

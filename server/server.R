@@ -19,6 +19,41 @@ server <- function(input, output) {
     )
   })
   
+  output$lb_totalFlights <- renderText({
+    format(stats$n_flights, big.mark = ",", scientific = FALSE)
+  })
+  
+  output$lb_airlines <- renderText({
+    format(stats$n_airlines, big.mark = ",", scientific = FALSE)
+  })
+  
+  output$lb_delayFlights <- renderText({
+    format(stats$n_flight_delay, big.mark = ",", scientific = FALSE)
+  })
+  
+  output$lb_ontimeFlights <- renderText({
+    format(stats$n_flight_ontime, big.mark = ",", scientific = FALSE)
+  })
+  
+  output$lb_cancelFlights <- renderText({
+    format(stats$n_flight_cancel, big.mark = ",", scientific = FALSE)
+  })
+  
+  output$lb_divertFlights <- renderText({
+    format(stats$n_flight_divert, big.mark = ",", scientific = FALSE)
+  })
+  
+  output$lb_short <- renderText({
+    format(stats$n_short_distance, big.mark = ",", scientific = FALSE)
+  })
+  
+  output$lb_medium <- renderText({
+    format(stats$n_medium_distance, big.mark = ",", scientific = FALSE)
+  })
+  
+  output$lb_long <- renderText({
+    format(stats$n_long_distance, big.mark = ",", scientific = FALSE)
+  })
 }
 
 
