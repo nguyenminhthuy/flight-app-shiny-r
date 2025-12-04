@@ -1,4 +1,4 @@
-source("ui/cards/card_overview_dataDescription.R")
+source("ui/cards/card_overview_templates.R")
 source("ui/cards/card_overview_plots.R")
 
 nav_tab_overview <- function() {
@@ -47,24 +47,24 @@ nav_tab_overview <- function() {
             br(),
             h4("General"),
             layout_columns(
-              card_overview_nFlights(),
-              card_overview_nAirlines(),
-              card_overview_nAirports()
+              card_overview("Total Flights", "lb_totalFlights"),
+              card_overview("Number of Airlines", "lb_airlines"),
+              card_overview("Number of Airports", "lb_airports"),
             ),
             br(),
             h4("Flight Status"),
             layout_columns(
-              card_overview_ndelayFlights(),
-              card_overview_ontimeFlights(),
-              card_overview_cancelFlights(),
-              card_overview_divertFlights()
+              card_overview("Number of Delayed Flights", "lb_delayFlights"),
+              card_overview("Number of On-time Flights", "lb_ontimeFlights"),
+              card_overview("Number of Canceled Flights", "lb_cancelFlights"),
+              card_overview("Number of Diverted Flights", "lb_divertFlights")
             ),
             br(),
             h4("Distance Category"),
             layout_columns(
-              card_overview_shortFlights(),
-              card_overview_mediumFlights(),
-              card_overview_longFlights()
+              card_overview("Number of Short-haul Flights", "lb_short"),
+              card_overview("Number of Medium-haul Flights", "lb_medium"),
+              card_overview("Number of Long-haul Flights", "lb_long")
             )
           ),
           
