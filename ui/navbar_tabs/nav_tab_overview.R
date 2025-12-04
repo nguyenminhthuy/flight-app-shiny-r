@@ -16,7 +16,7 @@ nav_tab_overview <- function() {
           style = "background: #f8f9fa; padding: 12px; border-radius: 8px; margin-bottom: 20px;",
           p("Flight Analysis Dashboard v1.0"),
           p("Updated: Dec 2025"),
-          p("Author: Thuy"),
+          p("Author: Thuy Nguyen"),
           p("Source: ",
             tags$a(
               href = "https://www.kaggle.com/datasets/patrickzel/flight-delay-and-cancellation-dataset-2019-2023/data",

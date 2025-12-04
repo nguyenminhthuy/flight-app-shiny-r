@@ -7,55 +7,45 @@ nav_tab_eda <- function() {
       sidebarPanel(
         width = 3,
         h4("Filter Data"),
-        
-        selectizeInput(
-          inputId = "sl_plotType",
-          label = "Plot-type;",
-          choices = c("Distribution", "Density", "Scatter", "Line", "Bar",  "Box-plot"),
-          multiple = FALSE,
-          options = list(placeholder = "Select one")
+        accordion(
+          id = "filter_accordion",
+          open = c("A"),   # nhóm mở mặc định
+          
+          # ==== A. Flight Attributes ====
+          accordion_panel(
+            "A. Flight Attributes", value = "A",
+            
+            selectInput("airline", "Airline", choices = c("None","Carrier","Weather","NAS","Security")),
+            selectInput("origin", "Origin", choices = c("None","Carrier","Weather","NAS","Security")),
+            selectInput("dest", "Destination", choices = c("None","Carrier","Weather","NAS","Security")),
+            dateRangeInput("fl_date", "Date range"),
+          ),
+          
+          # ==== B. Time Filters ====
+          accordion_panel(
+            "B. Time Filters", value = "B",
+            
+            sliderInput("dep_hour", "Departure hour", min = 0, max = 23, value = c(0,23)),
+            sliderInput("arr_hour", "Arrival hour", min = 0, max = 23, value = c(0,23)),
+            selectInput("dow", "Day of week", choices = 1:7),
+            selectInput("month", "Month", choices = 1:12),
+            selectInput("year", "Year", choices = 2019:2023)
+          ),
+          
+          # ==== C. Delay Filters ====
+          accordion_panel(
+            "C. Delay Filters", value = "C",
+            
+            sliderInput("dep_delay", "Departure delay", min = -60, max = 300, value = c(0, 60)),
+            sliderInput("arr_delay", "Arrival delay", min = -60, max = 300, value = c(0, 60)),
+            layout_columns(
+              checkboxInput("cancelled", "Cancelled?", value = FALSE),
+              checkboxInput("diverted", "Diverted?", value = FALSE)
+            ),
+            selectInput("cancel_type", "Cancellation type", choices = c("None","Carrier","Weather","NAS","Security","Aircraft"))
+          )
         ),
-        
-        selectizeInput(
-          inputId = "sl_XVariables",
-          label = "X-variable:",
-          choices = c("Option A", "Option B", "Option C", "Option D"),
-          multiple = FALSE,
-          options = list(placeholder = "Select one")
-        ),
-        
-        selectizeInput(
-          inputId = "sl_YVariables",
-          label = "Y-variable:",
-          choices = c("Option A", "Option B", "Option C", "Option D"),
-          multiple = FALSE,
-          options = list(placeholder = "Select one")
-        ),
-        
-        selectizeInput(
-          inputId = "sl_facetRow",
-          label = "Facet row:",
-          choices = c("Option A", "Option B", "Option C", "Option D"),
-          multiple = FALSE,
-          options = list(placeholder = "Select one")
-        ),
-        
-        selectizeInput(
-          inputId = "sl_facetCol",
-          label = "Facet column:",
-          choices = c("Option A", "Option B", "Option C", "Option D"),
-          multiple = FALSE,
-          options = list(placeholder = "Select one")
-        ),
-        
-        selectizeInput(
-          inputId = "sl_fill",
-          label = "Fill:",
-          choices = c("Option A", "Option B", "Option C", "Option D"),
-          multiple = FALSE,
-          options = list(placeholder = "Select one")
-        ),
-        
+        br(),
         actionButton(
           inputId = "btn_createPlot",
           label = tags$span(

@@ -1,3 +1,75 @@
+/* ============================
+     REMOVE BORDER + SHADOW
+     FOR ALL INPUT ELEMENTS
+     ============================ */
+
+  /* Text input, numeric input, date, dateRange */
+  input.form-control,
+  .form-select,
+  .input-group .form-control,
+  .daterangepicker,
+  .selectize-input {
+    box-shadow: none !important;
+  }
+
+  /* When focused */
+  input.form-control:focus,
+  .form-select:focus,
+  .selectize-input:focus {
+    box-shadow: none !important;
+  }
+
+  /* Selectize dropdown items */
+  .selectize-dropdown,
+  .selectize-dropdown-content {
+    box-shadow: none !important;
+  }
+
+  /* SliderInput track + handle */
+  .irs,
+  .irs-bar,
+  .irs-bar-edge,
+  .irs-single,
+  .irs-handle {
+    box-shadow: none !important;
+  }
+
+  /* Checkbox + radio */
+  .form-check-input {
+    box-shadow: none !important;
+  }
+  .form-check-input:focus {
+    box-shadow: none !important;
+  }
+
+  /* DateRangeInput pop-up */
+  .daterangepicker {
+    box-shadow: none !important;
+  }
+
+/* ============================
+     SIDEBAR / EDA
+     ============================ */
+.accordion-button {
+  background-color: #2c3e50 !important;
+  color: white !important;
+  font-weight: 600;
+  box-shadow: none !important;
+  border: none !important;
+}
+
+/* Đổi màu mũi tên */
+.accordion-button::after {
+  filter: brightness(0) invert(1); /* đổi sang màu trắng */
+}
+
+.accordion-button:not(.collapsed) {
+  background-color: #15a589 !important;
+  color: white !important;
+  box-shadow: none !important;
+  border: none !important;
+}   
+
 #btn_createPlot {
   background-color: #18bc9c;
   color: white;
@@ -15,3 +87,4 @@
   transform: scale(1.03);
   transition: 0.15s ease-in-out;
 }    
+

@@ -9,7 +9,7 @@ ui <- fillPage(
   tags$head(
     tags$link(rel = "stylesheet", type = "text/css", href = "style.css")
   ),
-  
+
   tags$head(
     tags$style(HTML("
     html, body {
