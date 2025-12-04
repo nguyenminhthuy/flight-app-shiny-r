@@ -15,8 +15,10 @@ nav_tab_eda <- function() {
           accordion_panel(
             "A. Flight Attributes", value = "A",
             
-            selectInput("airline", "Airline", choices = c("None","Carrier","Weather","NAS","Security")),
-            selectInput("origin", "Origin", choices = c("None","Carrier","Weather","NAS","Security")),
+            selectInput("airline", "Airline", choices = c("All","Carrier","Weather")),
+            selectInput("origin", "Origin", choices = list('East Coast' = list("NY", "NJ", "CT"),
+                                                           'West Coast' = list("WA", "OR", "CA"),
+                                                           'Midwest' = list("MN", "WI", "IA"))),
             selectInput("dest", "Destination", choices = c("None","Carrier","Weather","NAS","Security")),
             dateRangeInput("fl_date", "Date range"),
           ),
