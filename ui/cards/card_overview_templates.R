@@ -3,7 +3,7 @@ library(bsicons)
 card_overview <- function(title, output_id, icon_name = "airplane") {
   card(
     card_header(
-      style = "background-color: #5bc0de; color: white; text-align: center;
+      style = "background-color: #2c3e50; color: white; text-align: center;
                font-weight: bold; padding: 5px; margin: 0;",
       bs_icon(icon_name, size = "1em", style = "color: white;"),
       title

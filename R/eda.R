@@ -34,7 +34,7 @@ plot_flights_yearly <- function(df){
       height=250
     ) |>
     layout(
-      title = paste0("Monthly Flights Trend (2019–2023)"),
+      title = paste0("Yearly Flights Trend (2019–2023)"),
       xaxis = list(type = "category", title = "YEAR"),
       yaxis = list(title = "Total Flights")
     ) |> 
