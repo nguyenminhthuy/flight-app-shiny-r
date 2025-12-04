@@ -3,6 +3,8 @@ source("ui/navbar_tabs/nav_tab_eda.R")
 source("ui/navbar_tabs/nav_tab_model.R")
 source("ui/navbar_tabs/nav_tab_about.R")
 
+library(plotly)
+
 ui <- fillPage(
   tags$head(
     tags$link(rel = "stylesheet", type = "text/css", href = "style.css")

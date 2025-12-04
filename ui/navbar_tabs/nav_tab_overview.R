@@ -1,5 +1,5 @@
 source("ui/cards/card_overview_dataDescription.R")
-source("ui/cards/card_overview_visualize.R")
+source("ui/cards/card_overview_plots.R")
 
 nav_tab_overview <- function() {
   tabPanel(
@@ -43,7 +43,7 @@ nav_tab_overview <- function() {
           type = "tabs",
           
           tabPanel(
-            title = tagList(icon("table"), "Data Description"),
+            title = tagList(icon("table"), "Data Summary"),
             br(),
             h4("General"),
             layout_columns(
