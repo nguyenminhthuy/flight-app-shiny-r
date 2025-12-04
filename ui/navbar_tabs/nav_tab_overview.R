@@ -1,3 +1,6 @@
+source("ui/cards/card_overview_dataDescription.R")
+source("ui/cards/card_overview_visualize.R")
+
 nav_tab_overview <- function() {
   tabPanel(
     "Overview",
@@ -7,17 +10,29 @@ nav_tab_overview <- function() {
       # -------- Sidebar --------
       sidebarPanel(
         width = 3,
-        selectizeInput(
-          inputId = "my_choices",
-          label = "Select variable(s):",
-          choices = c("Option A", "Option B", "Option C", "Option D"),
-          multiple = TRUE,
-          options = list(placeholder = "Choose variable(s)...")
+        
+        h4("📘 Project Info"),
+        tags$div(
+          style = "background: #f8f9fa; padding: 12px; border-radius: 8px; margin-bottom: 20px;",
+          p("Flight Analysis Dashboard v1.0"),
+          p("Updated: Dec 2025"),
+          p("Author: Thuy"),
+          p("Source: ",
+            tags$a(
+              href = "https://www.kaggle.com/datasets/patrickzel/flight-delay-and-cancellation-dataset-2019-2023/data",
+              "Kaggle",
+              target = "_blank"
+            ))
         ),
         
-        p("You have selected:"),
-        textOutput("selected_output"),
-        br(), br()
+        h4("📊 Dataset Info"),
+        tags$div(
+          style = "background: #f8f9fa; padding: 12px; border-radius: 8px;",
+          p(strong("Flights: "), "2M"),
+          p(strong("Airlines: "), "18"),
+          p(strong("Airports: "), "380"),
+          p(strong("Period: "), "2019–2023")
+        )
       ),
       
       # -------- Main Panel --------
@@ -32,158 +47,46 @@ nav_tab_overview <- function() {
             br(),
             h4("General"),
             layout_columns(
-              card(
-                card_header(
-                  style = "bg-info color: white; text-align: center; 
-                            font-weight: bold; padding: 5px; margin: 0;",
-                  bsicons::bs_icon("airplane", size = "1em", style = "color: white;"),
-                  "Total Flights",
-                ),
-                card_body(
-                  div(
-                    style = "color: #18bc9c; text-align: center; font-size: 30px; font-weight: bold",
-                    textOutput("lb_totalFlights", container = span)
-                  )
-                )
-              ),
-              card(
-                card_header(
-                  style = "bg-info color: white; text-align: center; 
-                            font-weight: bold; padding: 5px; margin: 0;",
-                  bsicons::bs_icon("airplane", size = "1em", style = "color: white;"),
-                  "Number of Airlines",
-                ),
-                card_body(
-                  div(
-                    style = "color: #18bc9c; text-align: center; font-size: 30px; font-weight: bold",
-                    textOutput("lb_airlines", container = span)
-                  )
-                )
-              )
+              card_overview_nFlights(),
+              card_overview_nAirlines(),
+              card_overview_nAirports()
             ),
             br(),
             h4("Flight Status"),
             layout_columns(
-              card(
-                card_header(
-                  style = "bg-info color: white; text-align: center; 
-                            font-weight: bold; padding: 5px; margin: 0;",
-                  bsicons::bs_icon("airplane", size = "1em", style = "color: white;"),
-                  "Number of flights delayed",
-                ),
-                card_body(
-                  div(
-                    style = "color: #18bc9c; text-align: center; font-size: 30px; font-weight: bold",
-                    textOutput("lb_delayFlights", container = span)
-                  )
-                )
-              ),
-              card(
-                card_header(
-                  style = "bg-info color: white; text-align: center; 
-                            font-weight: bold; padding: 5px; margin: 0;",
-                  bsicons::bs_icon("airplane", size = "1em", style = "color: white;"),
-                  "Number of on-time flights",
-                ),
-                card_body(
-                  div(
-                    style = "color: #18bc9c; text-align: center; font-size: 30px; font-weight: bold",
-                    textOutput("lb_ontimeFlights", container = span)
-                  )
-                )
-              ),
-              card(
-                card_header(
-                  style = "bg-info color: white; text-align: center; 
-                            font-weight: bold; padding: 5px; margin: 0;",
-                  bsicons::bs_icon("airplane", size = "1em", style = "color: white;"),
-                  "Number of flights cancelled",
-                ),
-                card_body(
-                  div(
-                    style = "color: #18bc9c; text-align: center; font-size: 30px; font-weight: bold",
-                    textOutput("lb_cancelFlights", container = span)
-                  )
-                )
-              ),
-              card(
-                card_header(
-                  style = "bg-info color: white; text-align: center; 
-                            font-weight: bold; padding: 5px; margin: 0;",
-                  bsicons::bs_icon("airplane", size = "1em", style = "color: white;"),
-                  "Number of flights diverted",
-                ),
-                card_body(
-                  div(
-                    style = "color: #18bc9c; text-align: center; font-size: 30px; font-weight: bold",
-                    textOutput("lb_divertFlights", container = span)
-                  )
-                )
-              )
+              card_overview_ndelayFlights(),
+              card_overview_ontimeFlights(),
+              card_overview_cancelFlights(),
+              card_overview_divertFlights()
             ),
             br(),
             h4("Distance Category"),
             layout_columns(
-              card(
-                card_header(
-                  style = "bg-info color: white; text-align: center; 
-                            font-weight: bold; padding: 5px; margin: 0;",
-                  bsicons::bs_icon("airplane", size = "1em", style = "color: white;"),
-                  "Number of short-haul flights",
-                ),
-                card_body(
-                  div(
-                    style = "color: #18bc9c; text-align: center; font-size: 30px; font-weight: bold",
-                    textOutput("lb_short", container = span)
-                  )
-                )
-              ),
-              card(
-                card_header(
-                  style = "bg-info color: white; text-align: center; 
-                            font-weight: bold; padding: 5px; margin: 0;",
-                  bsicons::bs_icon("airplane", size = "1em", style = "color: white;"),
-                  "Number of medium-haul flights",
-                ),
-                card_body(
-                  div(
-                    style = "color: #18bc9c; text-align: center; font-size: 30px; font-weight: bold",
-                    textOutput("lb_medium", container = span)
-                  )
-                )
-              ),
-              card(
-                card_header(
-                  style = "bg-info color: white; text-align: center; 
-                            font-weight: bold; padding: 5px; margin: 0;",
-                  bsicons::bs_icon("airplane", size = "1em", style = "color: white;"),
-                  "Number of long-haul flights",
-                ),
-                card_body(
-                  div(
-                    style = "color: #18bc9c; text-align: center; font-size: 30px; font-weight: bold",
-                    textOutput("lb_long", container = span)
-                  )
-                )
-              )
+              card_overview_shortFlights(),
+              card_overview_mediumFlights(),
+              card_overview_longFlights()
             )
           ),
           
           tabPanel(
             title = tagList(icon("eye"), "View Data"),
-            p(),
+            br(),
             DTOutput("tb_data")
           ),
           
           tabPanel(
             title = tagList(icon("chart-bar"), "Visualize"),
-            p(),
-            tags$div(class = "about-card",
-                     tags$h3("Overall Dataset")
-            ), 
-            verbatimTextOutput("tabset1Selected")
+            br(),
+            layout_columns(
+              card_overview_flights_yearly(),
+              card_overview_flights_quarterly()
+            ),
+            br(),
+            layout_columns(
+              card_overview_flights_monthly(),
+              card_overview_flights_dow()
+            )
           )
-          
         )
       )
     )

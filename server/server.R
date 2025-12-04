@@ -27,6 +27,10 @@ server <- function(input, output) {
     format(stats$n_airlines, big.mark = ",", scientific = FALSE)
   })
   
+  output$lb_airports <- renderText({
+    format(stats$n_airports, big.mark = ",", scientific = FALSE)
+  })
+  
   output$lb_delayFlights <- renderText({
     format(stats$n_flight_delay, big.mark = ",", scientific = FALSE)
   })
@@ -53,6 +57,22 @@ server <- function(input, output) {
   
   output$lb_long <- renderText({
     format(stats$n_long_distance, big.mark = ",", scientific = FALSE)
+  })
+  
+  output$fig_flights_yearly <- renderPlotly({
+    plot_flights_yearly(df)
+  })
+  
+  output$fig_flights_quarterly <- renderPlotly({
+    plot_flights_quarterly(df)
+  })
+  
+  output$fig_flights_monthly <- renderPlotly({
+    plot_flights_monthly(df)
+  })
+  
+  output$fig_flights_dow <- renderPlotly({
+    plot_flights_dow(df)
   })
 }
 

@@ -23,9 +23,9 @@ nav_tab_about <- function() {
         
         h4("About Dataset"),
         tags$p(
-          "Dataset used in this app is from Kaggle: ",
+          "Dataset used in this app is from ",
           tags$a(href = "https://www.kaggle.com/datasets/patrickzel/flight-delay-and-cancellation-dataset-2019-2023/data", 
-                 "Airline Flight Delay and Cancellation Data", target = "_blank"), 
+                 "Kaggle", target = "_blank"), 
           ", which includes flight routes, delay times, and cancellation information. The key variables are as follow:"
         ),
         

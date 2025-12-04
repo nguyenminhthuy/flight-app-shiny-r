@@ -1,11 +1,11 @@
-library(shiny)
-library(shinydashboard)
-library(shinyWidgets)
-library(bslib)
-library(bsicons)
-library(shinythemes)
-library(DT)
+library(tidyverse)
+library(tidyr)
+library(dplyr)
+library(ggplot2)
+library(readr)
 library(data.table)
+library(plotly)
+library(lubridate)
 
 source("R/eda.R")
 
@@ -50,7 +50,6 @@ df <- df |>
 
 ############################################
 stats <- compute_basic_stats(df)
-
 
 
 
