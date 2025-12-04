@@ -19,46 +19,28 @@ server <- function(input, output) {
     )
   })
   
-  output$lb_totalFlights <- renderText({
-    format(stats$n_flights, big.mark = ",", scientific = FALSE)
+  #-----------------------------------
+  output_labels <- c(
+    lb_totalFlights = "n_flights",
+    lb_airlines = "n_airlines",
+    lb_airports = "n_airports",
+    lb_delayFlights = "n_flight_delay",
+    lb_ontimeFlights = "n_flight_ontime",
+    lb_cancelFlights = "n_flight_cancel",
+    lb_divertFlights = "n_flight_divert",
+    lb_short = "n_short_distance",
+    lb_medium = "n_medium_distance",
+    lb_long = "n_long_distance"
+  )
+  
+  lapply(names(output_labels), function(id) {
+    output[[id]] <- renderText({
+      val <- stats[[output_labels[[id]]]]
+      format(val, big.mark = ",", scientific = FALSE)
+    })
   })
   
-  output$lb_airlines <- renderText({
-    format(stats$n_airlines, big.mark = ",", scientific = FALSE)
-  })
-  
-  output$lb_airports <- renderText({
-    format(stats$n_airports, big.mark = ",", scientific = FALSE)
-  })
-  
-  output$lb_delayFlights <- renderText({
-    format(stats$n_flight_delay, big.mark = ",", scientific = FALSE)
-  })
-  
-  output$lb_ontimeFlights <- renderText({
-    format(stats$n_flight_ontime, big.mark = ",", scientific = FALSE)
-  })
-  
-  output$lb_cancelFlights <- renderText({
-    format(stats$n_flight_cancel, big.mark = ",", scientific = FALSE)
-  })
-  
-  output$lb_divertFlights <- renderText({
-    format(stats$n_flight_divert, big.mark = ",", scientific = FALSE)
-  })
-  
-  output$lb_short <- renderText({
-    format(stats$n_short_distance, big.mark = ",", scientific = FALSE)
-  })
-  
-  output$lb_medium <- renderText({
-    format(stats$n_medium_distance, big.mark = ",", scientific = FALSE)
-  })
-  
-  output$lb_long <- renderText({
-    format(stats$n_long_distance, big.mark = ",", scientific = FALSE)
-  })
-  
+  #-----------------------------------
   output$fig_flights_yearly <- renderPlotly({
     plot_flights_yearly(df)
   })
