@@ -1,16 +1,17 @@
 compute_basic_stats <- function(df) {
   df |>
     summarise(
-      n_flights          = n(),
-      n_airlines         = n_distinct(na.omit(AIRLINE)),
-      n_airports         = n_distinct(na.omit(ORIGIN)),
-      n_flight_delay     = sum(ARR_DELAY > 15, na.rm = TRUE),
-      n_flight_ontime    = sum(ARR_DELAY <= 15, na.rm = TRUE),
-      n_flight_cancel    = sum(CANCELLED == 1, na.rm = TRUE),
-      n_flight_divert    = sum(DIVERTED == 1, na.rm = TRUE),
-      n_short_distance   = sum(DISTANCE_CAT == "Short-haul", na.rm = TRUE),
-      n_medium_distance  = sum(DISTANCE_CAT == "Medium-haul", na.rm = TRUE),
-      n_long_distance    = sum(DISTANCE_CAT == "Long-haul", na.rm = TRUE)
+      n_flights = n(),
+      n_airlines = n_distinct(na.omit(AIRLINE)),
+      n_airports = n_distinct(na.omit(ORIGIN)),
+      n_flight_delay = sum(ARR_DELAY > 15, na.rm = TRUE),
+      n_flight_ontime = sum(ARR_DELAY <= 15, na.rm = TRUE),
+      n_flight_cancel = sum(CANCELLED == 1, na.rm = TRUE),
+      n_flight_divert = sum(DIVERTED == 1, na.rm = TRUE),
+      n_short_distance = sum(DISTANCE_CAT == "Short-haul", na.rm = TRUE),
+      n_medium_distance = sum(DISTANCE_CAT == "Medium-haul", na.rm = TRUE),
+      n_long_distance = sum(DISTANCE_CAT == "Long-haul", na.rm = TRUE)
+      
     )
 }
 
@@ -119,5 +120,9 @@ plot_flights_dow <- function(df){
       yaxis = list(title = "Total Flights")
     ) |> config(responsive = TRUE)
 }
+
+#---------------------------------------------
+
+
 
 

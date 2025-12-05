@@ -45,11 +45,49 @@ df <- df |>
       MONTH %in% c(3, 4, 5) ~ "Spring",
       MONTH %in% c(6, 7, 8) ~ "Summer",
       TRUE ~ "Fall"
-    )
+    ),
+    
+    DEST_LABEL = paste0(DEST_CITY, " (", DEST, ")")
   )
 
 ############################################
 stats <- compute_basic_stats(df)
+
+############################################
+unique_airlines <- sort(unique(df$AIRLINE))
+airline_choices <- c("All", unique_airlines)
+
+unique_years <- sort(unique(df$YEAR))
+years_choices <- c("All", unique_years)
+
+unique_months <- sort(unique(df$MONTH))
+month_choices <- c("All", unique_months)
+
+unique_seasons <- sort(unique(df$SEASON))
+season_choices <- c("All", unique_seasons)
+
+unique_seasons <- dow_levels[dow_levels %in% unique(df$DAY_OF_WEEK)]
+dow_choices <- c("All", unique_seasons)
+
+#-----------------------
+origin_df <- df |>
+  distinct(ORIGIN, ORIGIN_CITY) |>
+  mutate(ORIGIN_LABEL = paste0(ORIGIN_CITY, " (", ORIGIN, ")"))
+
+lst_origin <- setNames(origin_df$ORIGIN, origin_df$ORIGIN_LABEL)
+origin_choices <- c("All", lst_origin)
+
+#-----------------------
+dest_df <- df |>
+  distinct(DEST, DEST_CITY) |>
+  mutate(DEST_LABEL = paste0(DEST_CITY, " (", DEST, ")"))
+
+lst_dest <- setNames(dest_df$DEST, dest_df$DEST_LABEL)
+dest_choices <- c("All", lst_dest)
+
+
+
+
 
 
 

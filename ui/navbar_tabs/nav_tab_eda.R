@@ -1,3 +1,5 @@
+source("./global.R")
+
 nav_tab_eda <- function() {
   tabPanel(
     "EDA",
@@ -15,11 +17,9 @@ nav_tab_eda <- function() {
           accordion_panel(
             "A. Flight Attributes", value = "A",
             
-            selectInput("airline", "Airline", choices = c("All","Carrier","Weather")),
-            selectInput("origin", "Origin", choices = list('East Coast' = list("NY", "NJ", "CT"),
-                                                           'West Coast' = list("WA", "OR", "CA"),
-                                                           'Midwest' = list("MN", "WI", "IA"))),
-            selectInput("dest", "Destination", choices = c("None","Carrier","Weather","NAS","Security")),
+            selectInput("airline", "Airline", choices = airline_choices),
+            selectInput("origin", "Origin City (IATA)", choices = origin_choices),
+            selectInput("dest", "Destination City (IATA)", choices = dest_choices),
             dateRangeInput("fl_date", "Date range"),
           ),
           
@@ -29,9 +29,11 @@ nav_tab_eda <- function() {
             
             sliderInput("dep_hour", "Departure hour", min = 0, max = 23, value = c(0,23)),
             sliderInput("arr_hour", "Arrival hour", min = 0, max = 23, value = c(0,23)),
-            selectInput("dow", "Day of week", choices = 1:7),
-            selectInput("month", "Month", choices = 1:12),
-            selectInput("year", "Year", choices = 2019:2023)
+            selectInput("dow", "Day of week", choices = dow_choices),
+            selectInput("month", "Month", choices = month_choices),
+            selectInput("year", "Year", choices = years_choices),
+            selectInput("season", "Season", choices = season_choices)
+            
           ),
           
           # ==== C. Delay Filters ====

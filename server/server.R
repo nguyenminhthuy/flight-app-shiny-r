@@ -46,6 +46,9 @@ server <- function(input, output) {
       plot_fns[[id]](df)
     })
   })
+  
+  #-----------------------------------
+  
 }
 
 
