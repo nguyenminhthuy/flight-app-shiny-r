@@ -108,16 +108,33 @@ nav_tab_eda <- function() {
           type = "tabs",
           
           tabPanel(
-            title = tagList(icon("table"), "Data Description"),
+            title = tagList(icon("wave-square"), "Flights Over Time"),
             br(),
-            h4("General"),
             layout_columns(
-              
+              card_overview_plot("Yearly plot", "fig_flights_yearly"),
+              card_overview_plot("Quarterly plot", "fig_flights_quarterly")
+            ),
+            br(),
+            layout_columns(
+              card_overview_plot("Monthly plot", "fig_flights_monthly"),
+              card_overview_plot("Day-of-Week plot", "fig_flights_dow")
             )
           ),
           
           tabPanel(
-            title = tagList(icon("eye"), "View Data"),
+            title = tagList(icon("paper-plane"), "Airline Analysis"),
+            br(),
+            
+          ),
+          
+          tabPanel(
+            title = tagList(icon("plane-departure"), "Airport Analysis"),
+            br(),
+            
+          ),
+          
+          tabPanel(
+            title = tagList(icon("hourglass-half"), "Delay Analysis"),
             br(),
             
           )

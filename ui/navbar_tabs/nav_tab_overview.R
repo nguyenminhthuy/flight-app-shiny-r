@@ -72,20 +72,6 @@ nav_tab_overview <- function() {
             title = tagList(icon("eye"), "View Data"),
             br(),
             DTOutput("tb_data")
-          ),
-          
-          tabPanel(
-            title = tagList(icon("chart-bar"), "Visualize"),
-            br(),
-            layout_columns(
-              card_overview_plot("Yearly", "fig_flights_yearly"),
-              card_overview_plot("Quarterly", "fig_flights_quarterly")
-            ),
-            br(),
-            layout_columns(
-              card_overview_plot("Monthly", "fig_flights_monthly"),
-              card_overview_plot("Day of Week", "fig_flights_dow")
-            )
           )
         )
       )
