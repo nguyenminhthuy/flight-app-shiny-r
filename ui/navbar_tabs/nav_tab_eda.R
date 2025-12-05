@@ -10,7 +10,7 @@ nav_tab_eda <- function() {
         width = 3,
         h4("Filter Data"),
         accordion(
-          id = "filter_accordion",
+          id = NULL,
           open = c("A"),   # nhóm mở mặc định
           
           # ==== A. Flight Attributes ====
@@ -38,18 +38,67 @@ nav_tab_eda <- function() {
           
           # ==== C. Delay Filters ====
           accordion_panel(
-            "C. Delay Filters", value = "C",
+            "C. Operational Flight Filters", value = "C",
             
-            sliderInput("dep_delay", "Departure delay", min = -60, max = 300, value = c(0, 60)),
-            sliderInput("arr_delay", "Arrival delay", min = -60, max = 300, value = c(0, 60)),
-            layout_columns(
-              checkboxInput("cancelled", "Cancelled?", value = FALSE),
-              checkboxInput("diverted", "Diverted?", value = FALSE)
+            # --- Multiple-select ---
+            selectizeInput(
+              "flight_status",
+              "Flight status",
+              choices = c("Delayed", "Cancelled", "Diverted"),
+              multiple = TRUE,
+              options = list(
+                placeholder = "Select one or more statuses..."
+              )
             ),
-            selectInput("delay_type", "Delay type", 
-                        choices = c("All","N/A","Carrier","Weather","NAS","Security","Late Aircraft")),
-            selectInput("cancel_type", "Cancellation type", 
-                        choices = c("All","N/A","A = Carrier","B = Weather","C = NAS","D = Security"))
+            
+            # ---- Delay filters ----
+            conditionalPanel(
+              condition = "input.flight_status.includes('Delayed')",
+              
+              h6(tags$b("Delay Filters"), style = "color:#15a589;"), 
+              div(style="border-bottom: 1px solid #ccc; margin-bottom: 10px"),
+              
+              selectizeInput(
+                "delay_type",
+                "Delay type",
+                choices = c("N/A","All","Carrier","Weather","NAS","Security","Late Aircraft"),
+                options = list(placeholder = "Select delay reason...")
+              ),
+              
+              sliderInput(
+                "dep_delay_hr", "Departure delay (hours)",
+                min = round(min_dep_delay, 2), max = round(max_dep_delay, 2),
+                value = round(c(0, 15), 2), step = 0.25
+              ),
+              
+              sliderInput(
+                "arr_delay_hr", "Arrival delay (hours)",
+                min = round(min_arr_delay, 2), max = round(max_arr_delay, 2),
+                value = round(c(0, 15), 2), step = 0.25
+              )
+            ),
+            
+            # ---- Cancellation filters ----
+            conditionalPanel(
+              condition = "input.flight_status.includes('Cancelled')",
+              
+              h6(tags$b("Cancellation Filters"), style = "color:#15a589;"), 
+              div(style="border-bottom: 1px solid #ccc; margin-bottom: 10px"),
+              
+              selectizeInput(
+                "cancel_type",
+                "Cancellation type",
+                choices = c("N/A","All","A = Carrier","B = Weather","C = NAS","D = Security"),
+                options = list(placeholder = "Select cancellation reason...")
+              )
+            ),
+            
+            # ---- Diverted filters ----
+            conditionalPanel(
+              condition = "input.flight_status.includes('Diverted')",
+              h6(tags$b("Diverted Filters"), style = "color:#15a589;"), 
+              p("No additional filters for diverted flights.")
+            )
           )
         ),
         br(),
