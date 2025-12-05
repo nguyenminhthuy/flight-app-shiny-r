@@ -20,7 +20,7 @@ nav_tab_eda <- function() {
             selectInput("airline", "Airline", choices = airline_choices),
             selectInput("origin", "Origin City (IATA)", choices = origin_choices),
             selectInput("dest", "Destination City (IATA)", choices = dest_choices),
-            dateRangeInput("fl_date", "Date range"),
+            dateRangeInput("fl_date", "Date range", start = min_date, end = max_date)
           ),
           
           # ==== B. Time Filters ====
@@ -46,7 +46,10 @@ nav_tab_eda <- function() {
               checkboxInput("cancelled", "Cancelled?", value = FALSE),
               checkboxInput("diverted", "Diverted?", value = FALSE)
             ),
-            selectInput("cancel_type", "Cancellation type", choices = c("None","Carrier","Weather","NAS","Security","Aircraft"))
+            selectInput("delay_type", "Delay type", 
+                        choices = c("All","N/A","Carrier","Weather","NAS","Security","Late Aircraft")),
+            selectInput("cancel_type", "Cancellation type", 
+                        choices = c("All","N/A","A = Carrier","B = Weather","C = NAS","D = Security"))
           )
         ),
         br(),
