@@ -13,14 +13,13 @@ nav_tab_eda <- function() {
           id = NULL,
           open = c("A"),   # nhóm mở mặc định
           
-          # ==== A. Flight Attributes ====
+          # ==== A. Route Filters ====
           accordion_panel(
             "A. Route Filters", value = "A",
             
             selectInput("airline", "Airline", choices = airline_choices),
             selectInput("origin", "Origin City (IATA)", choices = origin_choices),
-            selectInput("dest", "Destination City (IATA)", choices = dest_choices),
-          
+            selectInput("dest", "Destination City (IATA)", choices = dest_choices)
           ),
           
           # ==== B. Date Filters ====
@@ -52,8 +51,7 @@ nav_tab_eda <- function() {
               div(style="border-bottom: 1px solid #ccc; margin-bottom: 10px"),
               
               selectizeInput(
-                "delay_type",
-                "Delay type",
+                "delay_type", "Delay type",
                 choices = c("(Select one)","All","Carrier","Weather","NAS","Security","Late Aircraft"),
                 options = list(placeholder = "Select delay reason...")
               ),
@@ -79,8 +77,7 @@ nav_tab_eda <- function() {
               div(style="border-bottom: 1px solid #ccc; margin-bottom: 10px"),
               
               selectizeInput(
-                "cancel_type",
-                "Cancellation type",
+                "cancel_type", "Cancellation type",
                 choices = c("(Select one)","All","A = Carrier","B = Weather","C = NAS","D = Security"),
                 options = list(placeholder = "Select cancellation reason...")
               )

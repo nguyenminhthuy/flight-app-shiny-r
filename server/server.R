@@ -1,4 +1,4 @@
-server <- function(input, output) {
+server <- function(input, output, session) {
   output$tb_data = DT::renderDT({
     datatable(
       df,
@@ -48,7 +48,102 @@ server <- function(input, output) {
   })
   
   #-----------------------------------
+  # ==== A. Route Filters ==== 
+  # nav_tab_eda.R
+  #-----------------------------------
+  #---- reactive: filter by airline ----
+  filtered_by_airline <- reactive({
+    if (input$airline == "(Select one)") return(df)
+    df[df$AIRLINE == input$airline]
+  })
   
+  #---- reactive: filter by origin ----
+  filtered_by_origin <- reactive({
+    if (input$origin == "(Select one)") return(filtered_by_airline())
+    filtered_by_airline()[filtered_by_airline()$ORIGIN == input$origin]
+  })
+  
+  #---- When airline changes → update origin + dest ----
+  observeEvent(input$airline, {
+    d <- filtered_by_airline()
+    
+    # Origin
+    df_o <- d |> 
+      distinct(ORIGIN, ORIGIN_CITY) |>
+      mutate(label = paste0(ORIGIN_CITY, " (", ORIGIN, ")"))
+    
+    origin_list2 <- setNames(df_o$ORIGIN, df_o$label)
+    
+    updateSelectInput(session, "origin",
+                      choices = c("(Select one)", origin_list2),
+                      selected = if (input$origin %in% df_o$ORIGIN) input$origin else "(Select one)"
+    )
+    
+    # Destination
+    df_d <- d |> 
+      distinct(DEST, DEST_CITY) |>
+      mutate(label = paste0(DEST_CITY, " (", DEST, ")"))
+    
+    dest_list2 <- setNames(df_d$DEST, df_d$label)
+    
+    updateSelectInput(session, "dest",
+                      choices = c("(Select one)", dest_list2),
+                      selected = if (input$dest %in% df_d$DEST) input$dest else "(Select one)"
+    )
+  })
+  
+  #---- When origin changes → update airline + dest ----
+  observeEvent(input$origin, {
+    d <- filtered_by_origin()
+    
+    # Airline
+    al2 <- sort(unique(d$AIRLINE))
+    
+    updateSelectInput(session, "airline",
+                      choices = c("(Select one)", al2),
+                      selected = if (input$airline %in% al2) input$airline else "(Select one)"
+    )
+    
+    # Dest
+    df_d <- d |> 
+      distinct(DEST, DEST_CITY) |>
+      mutate(label = paste0(DEST_CITY, " (", DEST, ")"))
+    
+    dest_list2 <- setNames(df_d$DEST, df_d$label)
+    
+    updateSelectInput(session, "dest",
+                      choices = c("(Select one)", dest_list2),
+                      selected = if (input$dest %in% df_d$DEST) input$dest else "(Select one)"
+    )
+  })
+  
+  #---- When dest changes → update airline + origin ----    
+  observeEvent(input$dest, {
+    if (input$dest == "(Select one)") {
+      d <- filtered_by_airline()
+    } else {
+      d <- df[df$DEST == input$dest, ]
+    }
+    
+    # Airline
+    al2 <- sort(unique(d$AIRLINE))
+    updateSelectInput(session, "airline",
+                      choices = c("(Select one)", al2),
+                      selected = if (input$airline %in% al2) input$airline else "(Select one)"
+    )
+    
+    # Origin
+    df_o <- d |> 
+      distinct(ORIGIN, ORIGIN_CITY) |>
+      mutate(label = paste0(ORIGIN_CITY, " (", ORIGIN, ")"))
+    
+    origin_list2 <- setNames(df_o$ORIGIN, df_o$label)
+    
+    updateSelectInput(session, "origin",
+                      choices = c("(Select one)", origin_list2),
+                      selected = if (input$origin %in% df_o$ORIGIN) input$origin else "(Select one)"
+    )
+  })
 }
 
 
