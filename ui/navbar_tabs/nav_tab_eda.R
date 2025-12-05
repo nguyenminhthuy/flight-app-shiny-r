@@ -15,41 +15,34 @@ nav_tab_eda <- function() {
           
           # ==== A. Flight Attributes ====
           accordion_panel(
-            "A. Flight Attributes", value = "A",
+            "A. Route Filters", value = "A",
             
             selectInput("airline", "Airline", choices = airline_choices),
             selectInput("origin", "Origin City (IATA)", choices = origin_choices),
             selectInput("dest", "Destination City (IATA)", choices = dest_choices),
-            dateRangeInput("fl_date", "Date range", start = min_date, end = max_date)
+          
           ),
           
-          # ==== B. Time Filters ====
+          # ==== B. Date Filters ====
           accordion_panel(
-            "B. Time Filters", value = "B",
+            "B. Date Filters", value = "B",
             
-            sliderInput("dep_hour", "Departure hour", min = 0, max = 23, value = c(0,23)),
-            sliderInput("arr_hour", "Arrival hour", min = 0, max = 23, value = c(0,23)),
-            selectInput("dow", "Day of week", choices = dow_choices),
-            selectInput("month", "Month", choices = month_choices),
-            selectInput("year", "Year", choices = years_choices),
-            selectInput("season", "Season", choices = season_choices)
+            dateRangeInput("fl_date", "Date range", start = min_date, end = max_date)
             
+            # sliderInput("dep_hour", "Departure hour", min = 0, max = 23, value = c(0,23)),
+            # sliderInput("arr_hour", "Arrival hour", min = 0, max = 23, value = c(0,23)),
+            # selectInput("dow", "Day of week", choices = dow_choices),
+            # selectInput("month", "Month", choices = month_choices),
+            # selectInput("year", "Year", choices = years_choices),
+            # selectInput("season", "Season", choices = season_choices)
           ),
           
-          # ==== C. Delay Filters ====
+          # ==== C. Operational Flight Filters ====
           accordion_panel(
             "C. Operational Flight Filters", value = "C",
             
-            # --- Multiple-select ---
-            selectizeInput(
-              "flight_status",
-              "Flight status",
-              choices = c("Delayed", "Cancelled", "Diverted"),
-              multiple = TRUE,
-              options = list(
-                placeholder = "Select one or more statuses..."
-              )
-            ),
+            selectInput("flight_status", "Flight status", 
+                        choices = c("(Select one)", "Delayed", "Cancelled", "Diverted")),
             
             # ---- Delay filters ----
             conditionalPanel(
@@ -61,7 +54,7 @@ nav_tab_eda <- function() {
               selectizeInput(
                 "delay_type",
                 "Delay type",
-                choices = c("N/A","All","Carrier","Weather","NAS","Security","Late Aircraft"),
+                choices = c("(Select one)","All","Carrier","Weather","NAS","Security","Late Aircraft"),
                 options = list(placeholder = "Select delay reason...")
               ),
               
@@ -88,7 +81,7 @@ nav_tab_eda <- function() {
               selectizeInput(
                 "cancel_type",
                 "Cancellation type",
-                choices = c("N/A","All","A = Carrier","B = Weather","C = NAS","D = Security"),
+                choices = c("(Select one)","All","A = Carrier","B = Weather","C = NAS","D = Security"),
                 options = list(placeholder = "Select cancellation reason...")
               )
             ),
