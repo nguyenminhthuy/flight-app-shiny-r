@@ -46,6 +46,23 @@ server <- function(input, output, session) {
       plot_fns[[id]](df)
     })
   })
+  #-----------------------------------
+  output$ui_time_plot <- renderUI({
+    req(input$time_granularity)
+    
+    if (input$time_granularity == "Year") {
+      plotlyOutput("fig_flights_yearly")
+      
+    } else if (input$time_granularity == "Quarter") {
+      plotlyOutput("fig_flights_quarterly")
+      
+    } else if (input$time_granularity == "Month") {
+      plotlyOutput("fig_flights_monthly")
+      
+    } else if (input$time_granularity == "Day of Week") {
+      plotlyOutput("fig_flights_dow")
+    }
+  })
   
   #-----------------------------------
   # ==== A. Route Filters ==== 

@@ -108,16 +108,22 @@ nav_tab_eda <- function() {
           type = "tabs",
           
           tabPanel(
-            title = tagList(icon("wave-square"), "Flights Over Time"),
-            br(),
-            layout_columns(
-              card_overview_plot("Yearly plot", "fig_flights_yearly"),
-              card_overview_plot("Quarterly plot", "fig_flights_quarterly")
+            title = tagList(icon("wave-square"), "Flights Overview"),
+            
+            radioGroupButtons(
+              inputId = "time_granularity",
+              #label = "Time Level",
+              choices = c("Year", "Quarter", "Month", "Day of Week"),
+              justified = TRUE,
+              checkIcon = list(
+                yes = icon("check")
+              )
             ),
+            uiOutput("ui_time_plot"),
             br(),
-            layout_columns(
-              card_overview_plot("Monthly plot", "fig_flights_monthly"),
-              card_overview_plot("Day-of-Week plot", "fig_flights_dow")
+            fluidRow(
+              column(6, card(plotlyOutput("fig_top_routes"), height = "350px")),
+              column(6, card(plotlyOutput("fig_top_airports"), height = "350px"))
             )
           ),
           
@@ -128,7 +134,7 @@ nav_tab_eda <- function() {
           ),
           
           tabPanel(
-            title = tagList(icon("plane-departure"), "Airport Analysis"),
+            title = tagList(icon("plane-departure"), "Airport/Route Analysis"),
             br(),
             
           ),

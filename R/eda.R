@@ -11,7 +11,6 @@ compute_basic_stats <- function(df) {
       n_short_distance = sum(DISTANCE_CAT == "Short-haul", na.rm = TRUE),
       n_medium_distance = sum(DISTANCE_CAT == "Medium-haul", na.rm = TRUE),
       n_long_distance = sum(DISTANCE_CAT == "Long-haul", na.rm = TRUE)
-      
     )
 }
 
@@ -32,7 +31,7 @@ plot_flights_yearly <- function(df){
       data = df_yearly,
       x = ~YEAR, y = ~Total_Flights,
       type = "bar", color = ~as.factor(YEAR),
-      height=250
+      height=400
     ) |>
     layout(
       title = paste0("Yearly Flights Trend (2019–2023)"),
@@ -59,7 +58,7 @@ plot_flights_quarterly <- function(df){
     data = df_quarter,
     x = ~QUARTER, y = ~Total_Flights,
     type = "scatter", color = ~as.factor(YEAR), mode = "lines+markers",
-    height=250
+    height=400
   ) |>
     layout(
       title = paste0("Quarterly Flights Trend (2019–2023)"),
@@ -86,7 +85,7 @@ plot_flights_monthly <- function(df){
     data = df_monthly,
     x = ~MONTH, y = ~Total_Flights,
     type = "scatter", color = ~as.factor(YEAR), mode = "lines+markers",
-    height=250
+    height=400
   ) |>
     layout(
       title = paste0("Monthly Flights Trend (2019–2023)"),
@@ -112,7 +111,7 @@ plot_flights_dow <- function(df){
     data = airline_dow,
     x = ~DAY_OF_WEEK, y = ~Total_Flights,
     type = "scatter", color = ~as.factor(YEAR), mode = "lines+markers",
-    height=250
+    height=400
   ) |>
     layout(
       title = paste0("Weekly Flights Trend (2019–2023)"),
