@@ -27,13 +27,6 @@ nav_tab_eda <- function() {
             "B. Date Filters", value = "B",
             
             dateRangeInput("fl_date", "Date range", start = min_date, end = max_date)
-            
-            # sliderInput("dep_hour", "Departure hour", min = 0, max = 23, value = c(0,23)),
-            # sliderInput("arr_hour", "Arrival hour", min = 0, max = 23, value = c(0,23)),
-            # selectInput("dow", "Day of week", choices = dow_choices),
-            # selectInput("month", "Month", choices = month_choices),
-            # selectInput("year", "Year", choices = years_choices),
-            # selectInput("season", "Season", choices = season_choices)
           ),
           
           # ==== C. Operational Flight Filters ====
@@ -108,7 +101,7 @@ nav_tab_eda <- function() {
           type = "tabs",
           
           tabPanel(
-            title = tagList(icon("wave-square"), "Flights Overview"),
+            title = tagList(icon("eye"), "Overview"),
             br(),
             fluidRow(
               column(6, card(plotlyOutput("fig_flights_yearly"), height = "300px")),
@@ -122,19 +115,7 @@ nav_tab_eda <- function() {
           ),
           
           tabPanel(
-            title = tagList(icon("paper-plane"), "Airline Analysis"),
-            br(),
-            
-          ),
-          
-          tabPanel(
-            title = tagList(icon("plane-departure"), "Airport/Route Analysis"),
-            br(),
-            
-          ),
-          
-          tabPanel(
-            title = tagList(icon("hourglass-half"), "Delay Analysis"),
+            title = tagList(icon("chart-line"), "Analysis"),
             br(),
             
           )

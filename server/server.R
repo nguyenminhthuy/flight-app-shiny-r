@@ -61,94 +61,98 @@ server <- function(input, output, session) {
   #==================================
   #---- reactive: filter by airline ----
   filtered_by_airline <- reactive({
-    if (input$airline == "(Select one)") return(df)
-    df[df$AIRLINE == input$airline]
+    if (input$airline %in% c("(Select one)", "All")) return(df)
+  df[df$AIRLINE == input$airline, ]
   })
   
   #---- reactive: filter by origin ----
   filtered_by_origin <- reactive({
-    if (input$origin == "(Select one)") return(filtered_by_airline())
-    filtered_by_airline()[filtered_by_airline()$ORIGIN == input$origin]
+    if (input$origin %in% c("(Select one)", "All")) return(filtered_by_airline())
+  filtered_by_airline()[filtered_by_airline()$ORIGIN == input$origin, ]
   })
   
   #---- When airline changes → update origin + dest ----
   observeEvent(input$airline, {
-    d <- filtered_by_airline()
+    if (input$airline %in% c("(Select one)", "All")) {
+      d <- df
+    } else {
+      d <- filtered_by_airline()
+    }
     
-    # Origin
-    df_o <- d |> 
-      distinct(ORIGIN, ORIGIN_CITY) |>
+    # Update origin
+    df_o <- d |> distinct(ORIGIN, ORIGIN_CITY) |>
       mutate(label = paste0(ORIGIN_CITY, " (", ORIGIN, ")"))
     
     origin_list2 <- setNames(df_o$ORIGIN, df_o$label)
     
     updateSelectInput(session, "origin",
-                      choices = c("(Select one)", origin_list2),
+                      choices = c("(Select one)", "All", origin_list2),
                       selected = if (input$origin %in% df_o$ORIGIN) input$origin else "(Select one)"
     )
     
-    # Destination
-    df_d <- d |> 
-      distinct(DEST, DEST_CITY) |>
+    # Update dest
+    df_d <- d |> distinct(DEST, DEST_CITY) |>
       mutate(label = paste0(DEST_CITY, " (", DEST, ")"))
     
     dest_list2 <- setNames(df_d$DEST, df_d$label)
     
     updateSelectInput(session, "dest",
-                      choices = c("(Select one)", dest_list2),
+                      choices = c("(Select one)", "All", dest_list2),
                       selected = if (input$dest %in% df_d$DEST) input$dest else "(Select one)"
     )
   })
   
   #---- When origin changes → update airline + dest ----
   observeEvent(input$origin, {
-    d <- filtered_by_origin()
+    # Nếu user chọn All → reset
+    if (input$origin %in% c("(Select one)", "All")) {
+      d <- filtered_by_airline()
+    } else {
+      d <- filtered_by_origin()
+    }
     
     # Airline
     al2 <- sort(unique(d$AIRLINE))
-    
     updateSelectInput(session, "airline",
-                      choices = c("(Select one)", al2),
+                      choices = c("(Select one)", "All", al2),
                       selected = if (input$airline %in% al2) input$airline else "(Select one)"
     )
     
     # Dest
-    df_d <- d |> 
-      distinct(DEST, DEST_CITY) |>
+    df_d <- d |> distinct(DEST, DEST_CITY) |> 
       mutate(label = paste0(DEST_CITY, " (", DEST, ")"))
     
     dest_list2 <- setNames(df_d$DEST, df_d$label)
     
     updateSelectInput(session, "dest",
-                      choices = c("(Select one)", dest_list2),
+                      choices = c("(Select one)", "All", dest_list2),
                       selected = if (input$dest %in% df_d$DEST) input$dest else "(Select one)"
     )
   })
   
   #---- When dest changes → update airline + origin ----    
   observeEvent(input$dest, {
-    if (input$dest == "(Select one)") {
+    if (input$dest %in% c("(Select one)", "All")) {
       d <- filtered_by_airline()
     } else {
       d <- df[df$DEST == input$dest, ]
     }
     
-    # Airline
+    # airline
     al2 <- sort(unique(d$AIRLINE))
     updateSelectInput(session, "airline",
-                      choices = c("(Select one)", al2),
+                      choices = c("(Select one)", "All", al2),
                       selected = if (input$airline %in% al2) input$airline else "(Select one)"
     )
     
-    # Origin
-    df_o <- d |> 
-      distinct(ORIGIN, ORIGIN_CITY) |>
+    # origin
+    df_o <- d |> distinct(ORIGIN, ORIGIN_CITY) |>
       mutate(label = paste0(ORIGIN_CITY, " (", ORIGIN, ")"))
     
     origin_list2 <- setNames(df_o$ORIGIN, df_o$label)
     
     updateSelectInput(session, "origin",
-                      choices = c("(Select one)", origin_list2),
+                      choices = c("(Select one)", "All", origin_list2),
                       selected = if (input$origin %in% df_o$ORIGIN) input$origin else "(Select one)"
     )
   })
