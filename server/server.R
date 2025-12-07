@@ -33,41 +33,32 @@ server <- function(input, output, session) {
     })
   })
   
-  #-----------------------------------
+  #==================================
+  # hàm gọn
   plot_fns <- list(
+    # over time
     fig_flights_yearly = plot_flights_yearly,
     fig_flights_quarterly = plot_flights_quarterly,
     fig_flights_monthly = plot_flights_monthly,
     fig_flights_dow = plot_flights_dow
   )
-  
+
   lapply(names(plot_fns), function(id) {
     output[[id]] <- renderPlotly({
       plot_fns[[id]](df)
     })
   })
-  #-----------------------------------
-  output$ui_time_plot <- renderUI({
-    req(input$time_granularity)
-    
-    if (input$time_granularity == "Year") {
-      plotlyOutput("fig_flights_yearly")
-      
-    } else if (input$time_granularity == "Quarter") {
-      plotlyOutput("fig_flights_quarterly")
-      
-    } else if (input$time_granularity == "Month") {
-      plotlyOutput("fig_flights_monthly")
-      
-    } else if (input$time_granularity == "Day of Week") {
-      plotlyOutput("fig_flights_dow")
-    }
-  })
   
-  #-----------------------------------
+  # hàm standard Render
+  # output$fig_flights_yearly <- renderPlotly({ plot_flights_yearly(df) })
+  # output$fig_flights_quarterly <- renderPlotly({ plot_flights_quarterly(df) })
+  # output$fig_flights_monthly <- renderPlotly({ plot_flights_monthly(df) })
+  # output$fig_flights_dow <- renderPlotly({ plot_flights_dow(df) })
+  
+  #==================================
   # ==== A. Route Filters ==== 
   # nav_tab_eda.R
-  #-----------------------------------
+  #==================================
   #---- reactive: filter by airline ----
   filtered_by_airline <- reactive({
     if (input$airline == "(Select one)") return(df)

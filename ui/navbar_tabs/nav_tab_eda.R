@@ -109,21 +109,15 @@ nav_tab_eda <- function() {
           
           tabPanel(
             title = tagList(icon("wave-square"), "Flights Overview"),
-            
-            radioGroupButtons(
-              inputId = "time_granularity",
-              #label = "Time Level",
-              choices = c("Year", "Quarter", "Month", "Day of Week"),
-              justified = TRUE,
-              checkIcon = list(
-                yes = icon("check")
-              )
-            ),
-            uiOutput("ui_time_plot"),
             br(),
             fluidRow(
-              column(6, card(plotlyOutput("fig_top_routes"), height = "350px")),
-              column(6, card(plotlyOutput("fig_top_airports"), height = "350px"))
+              column(6, card(plotlyOutput("fig_flights_yearly"), height = "300px")),
+              column(6, card(plotlyOutput("fig_flights_quarterly"), height = "300px"))
+            ),
+            br(),
+            fluidRow(
+              column(6, card(plotlyOutput("fig_flights_monthly"), height = "300px")),
+              column(6, card(plotlyOutput("fig_flights_dow"), height = "300px"))
             )
           ),
           

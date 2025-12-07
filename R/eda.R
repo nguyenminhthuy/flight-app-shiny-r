@@ -1,3 +1,5 @@
+library(dplyr)
+
 compute_basic_stats <- function(df) {
   df |>
     summarise(
@@ -30,8 +32,7 @@ plot_flights_yearly <- function(df){
   plot_ly(
       data = df_yearly,
       x = ~YEAR, y = ~Total_Flights,
-      type = "bar", color = ~as.factor(YEAR),
-      height=400
+      type = "bar", color = ~as.factor(YEAR)
     ) |>
     layout(
       title = paste0("Yearly Flights Trend (2019–2023)"),
@@ -57,8 +58,7 @@ plot_flights_quarterly <- function(df){
   plot_ly(
     data = df_quarter,
     x = ~QUARTER, y = ~Total_Flights,
-    type = "scatter", color = ~as.factor(YEAR), mode = "lines+markers",
-    height=400
+    type = "scatter", color = ~as.factor(YEAR), mode = "lines+markers"
   ) |>
     layout(
       title = paste0("Quarterly Flights Trend (2019–2023)"),
@@ -84,8 +84,7 @@ plot_flights_monthly <- function(df){
   fig <- plot_ly(
     data = df_monthly,
     x = ~MONTH, y = ~Total_Flights,
-    type = "scatter", color = ~as.factor(YEAR), mode = "lines+markers",
-    height=400
+    type = "scatter", color = ~as.factor(YEAR), mode = "lines+markers"
   ) |>
     layout(
       title = paste0("Monthly Flights Trend (2019–2023)"),
@@ -110,8 +109,7 @@ plot_flights_dow <- function(df){
   fig <- plot_ly(
     data = airline_dow,
     x = ~DAY_OF_WEEK, y = ~Total_Flights,
-    type = "scatter", color = ~as.factor(YEAR), mode = "lines+markers",
-    height=400
+    type = "scatter", color = ~as.factor(YEAR), mode = "lines+markers"
   ) |>
     layout(
       title = paste0("Weekly Flights Trend (2019–2023)"),
@@ -119,6 +117,9 @@ plot_flights_dow <- function(df){
       yaxis = list(title = "Total Flights")
     ) |> config(responsive = TRUE)
 }
+
+#---------------------------------------------
+
 
 #---------------------------------------------
 
