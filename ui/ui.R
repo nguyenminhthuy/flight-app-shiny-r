@@ -7,22 +7,15 @@ library(plotly)
 
 ui <- fillPage(
   tags$head(
-    tags$link(rel = "stylesheet", type = "text/css", href = "style.css")
-  ),
-
-  tags$head(
+    tags$link(rel = "stylesheet", 
+              type = "text/css", href = "style.css"),
     tags$style(HTML("
     html, body {
       overflow: auto !important;
     }
-
-    .content, .tab-content, .tab-pane, .container-fluid, .main-panel {
-      overflow: visible !important;
-      height: auto !important;
-    }
   "))
   ),
-  
+
   navbarPage(
     "Flight Delay Dashboard",
     theme = bs_theme(version = 5, bootswatch = "flatly"),

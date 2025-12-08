@@ -62,32 +62,44 @@ server <- function(input, output, session) {
   })
   
   #==================================
-  o_start <- reactive({
+  range_parsed <- eventReactive(input$o_btn_createPlot, {
+    
     if (input$o_mode == "date") {
-      input$o_date_range[1]
+      
+      list(
+        start = input$o_date_range[1],
+        end   = input$o_date_range[2]
+      )
+      
     } else if (input$o_mode == "ym") {
-      input$o_ym_range[1]
-    } else {
-      input$o_year_range[1]
+      
+      list(
+        start = input$o_ym_range[1],
+        end   = input$o_ym_range[2]
+      )
+      
+    } else if (input$o_mode == "year") {
+      
+      list(
+        start = input$o_year_range[1],
+        end   = input$o_year_range[2]
+      )
     }
-  })
-  
-  o_end <- reactive({
-    if (input$o_mode == "date") {
-      input$o_date_range[2]
-    } else if (input$o_mode == "ym") {
-      input$o_ym_range[2]
-    } else {
-      input$o_year_range[2]
-    }
+    
   })
   
   output$o_result <- renderPrint({
     list(
-      start = o_start(),
-      end   = o_end()
+      airline = input$o_airline,
+      origin = input$o_origin,
+      des = input$o_des,
+      season = input$o_season,
+      mode = input$o_mode,
+      range = range_parsed()
     )
   })
+  
+  
 }
 
 
