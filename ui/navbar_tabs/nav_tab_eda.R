@@ -1,126 +1,40 @@
-source("./global.R")
+source("ui/eda_panels/eda_airline.R")
+source("ui/eda_panels/eda_delay.R")
+source("ui/eda_panels/eda_overview.R")
+source("ui/eda_panels/eda_airport.R")
 
 nav_tab_eda <- function() {
-  tabPanel(
-    "EDA",
-    sidebarLayout(
-      
-      # -------- Sidebar --------
-      sidebarPanel(
-        width = 3,
-        h4("Filter Data"),
-        accordion(
-          id = NULL,
-          open = c("A"),   # nhóm mở mặc định
-          
-          # ==== A. Route Filters ====
-          accordion_panel(
-            "A. Route Filters", value = "A",
-            
-            selectInput("airline", "Airline", choices = airline_choices),
-            selectInput("origin", "Origin City (IATA)", choices = origin_choices),
-            selectInput("dest", "Destination City (IATA)", choices = dest_choices)
-          ),
-          
-          # ==== B. Date Filters ====
-          accordion_panel(
-            "B. Date Filters", value = "B",
-            
-            dateRangeInput("fl_date", "Date range", start = min_date, end = max_date)
-          ),
-          
-          # ==== C. Operational Flight Filters ====
-          accordion_panel(
-            "C. Operational Flight Filters", value = "C",
-            
-            selectInput("flight_status", "Flight status", 
-                        choices = c("(Select one)", "Delayed", "Cancelled", "Diverted")),
-            
-            # ---- Delay filters ----
-            conditionalPanel(
-              condition = "input.flight_status.includes('Delayed')",
-              
-              h6(tags$b("Delay Filters"), style = "color:#15a589;"), 
-              div(style="border-bottom: 1px solid #ccc; margin-bottom: 10px"),
-              
-              selectizeInput(
-                "delay_type", "Delay type",
-                choices = c("(Select one)","All","Carrier","Weather","NAS","Security","Late Aircraft"),
-                options = list(placeholder = "Select delay reason...")
-              ),
-              
-              sliderInput(
-                "dep_delay_hr", "Departure delay (hours)",
-                min = round(min_dep_delay, 2), max = round(max_dep_delay, 2),
-                value = round(c(0, 15), 2), step = 0.25
-              ),
-              
-              sliderInput(
-                "arr_delay_hr", "Arrival delay (hours)",
-                min = round(min_arr_delay, 2), max = round(max_arr_delay, 2),
-                value = round(c(0, 15), 2), step = 0.25
-              )
-            ),
-            
-            # ---- Cancellation filters ----
-            conditionalPanel(
-              condition = "input.flight_status.includes('Cancelled')",
-              
-              h6(tags$b("Cancellation Filters"), style = "color:#15a589;"), 
-              div(style="border-bottom: 1px solid #ccc; margin-bottom: 10px"),
-              
-              selectizeInput(
-                "cancel_type", "Cancellation type",
-                choices = c("(Select one)","All","A = Carrier","B = Weather","C = NAS","D = Security"),
-                options = list(placeholder = "Select cancellation reason...")
-              )
-            ),
-            
-            # ---- Diverted filters ----
-            conditionalPanel(
-              condition = "input.flight_status.includes('Diverted')",
-              h6(tags$b("Diverted Filters"), style = "color:#15a589;"), 
-              p("No additional filters for diverted flights.")
-            )
-          )
-        ),
-        br(),
-        actionButton(
-          inputId = "btn_createPlot",
-          label = tags$span(
-            icon("play"), " Create plot"
-          )
-        )
-      ),
-      
-      # -------- Main Panel --------
-      mainPanel(
-        width = 9,
-        
-        tabsetPanel(
-          type = "tabs",
-          
-          tabPanel(
-            title = tagList(icon("eye"), "Overview"),
-            br(),
-            fluidRow(
-              column(6, card(plotlyOutput("fig_flights_yearly"), height = "300px")),
-              column(6, card(plotlyOutput("fig_flights_quarterly"), height = "300px"))
-            ),
-            br(),
-            fluidRow(
-              column(6, card(plotlyOutput("fig_flights_monthly"), height = "300px")),
-              column(6, card(plotlyOutput("fig_flights_dow"), height = "300px"))
-            )
-          ),
-          
-          tabPanel(
-            title = tagList(icon("chart-line"), "Analysis"),
-            br(),
-            
-          )
-        )
-      )
-    )
+  tags$head(
+    tags$link(rel = "stylesheet", type = "text/css", href = "style.css")
+  )
+  navbarMenu("EDA", 
+             icon = icon("magnifying-glass-chart"),
+             tabPanel(
+               "Flight Overview",
+               icon = icon("plane"),
+               value = "eda_overview",
+               eda_overview_ui()
+             ),
+             
+             tabPanel(
+               "Delay Analysis",
+               icon = icon("hourglass-half"),
+               value = "eda_delay",
+               eda_delay_ui()
+             ),
+             
+             tabPanel(
+               "Airline Analysis",
+               icon = icon("plane-departure"),
+               value = "eda_airline",
+               eda_airline_ui()
+             ),
+             
+             tabPanel(
+               "Airport/Route Analysis",
+               icon = icon("map"),
+               value = "eda_airport",
+               eda_airport_ui()
+             )
   )
 }

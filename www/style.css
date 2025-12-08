@@ -70,21 +70,3 @@
   border: none !important;
 }   
 
-#btn_createPlot {
-  background-color: #18bc9c;
-  color: white;
-  border: none;
-  font-size: 16px;
-  font-weight: bold;
-  padding: 12px 18px;
-  width: 100%;
-  border-radius: 8px;
-  cursor: pointer;
-}
-
-#btn_createPlot:hover {
-  background-color: #15a589 !important;
-  transform: scale(1.03);
-  transition: 0.15s ease-in-out;
-}    
-

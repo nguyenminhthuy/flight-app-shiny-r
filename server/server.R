@@ -11,6 +11,18 @@ server <- function(input, output, session) {
     )
   })
   
+  output$o_result <- renderPrint({
+    if (input$mode == "date") {
+      return(input$date_range)
+    }
+    if (input$mode == "ym") {
+      return(input$ym_range)
+    }
+    if (input$mode == "year") {
+      return(input$year_range)
+    }
+  })
+  
   #-----------------------------------
   output_labels <- c(
     # --- overview ---
@@ -49,111 +61,31 @@ server <- function(input, output, session) {
     })
   })
   
-  # hàm standard Render
-  # output$fig_flights_yearly <- renderPlotly({ plot_flights_yearly(df) })
-  # output$fig_flights_quarterly <- renderPlotly({ plot_flights_quarterly(df) })
-  # output$fig_flights_monthly <- renderPlotly({ plot_flights_monthly(df) })
-  # output$fig_flights_dow <- renderPlotly({ plot_flights_dow(df) })
-  
   #==================================
-  # ==== A. Route Filters ==== 
-  # nav_tab_eda.R
-  #==================================
-  #---- reactive: filter by airline ----
-  filtered_by_airline <- reactive({
-    if (input$airline %in% c("(Select one)", "All")) return(df)
-  df[df$AIRLINE == input$airline, ]
-  })
-  
-  #---- reactive: filter by origin ----
-  filtered_by_origin <- reactive({
-    if (input$origin %in% c("(Select one)", "All")) return(filtered_by_airline())
-  filtered_by_airline()[filtered_by_airline()$ORIGIN == input$origin, ]
-  })
-  
-  #---- When airline changes → update origin + dest ----
-  observeEvent(input$airline, {
-    if (input$airline %in% c("(Select one)", "All")) {
-      d <- df
+  o_start <- reactive({
+    if (input$o_mode == "date") {
+      input$o_date_range[1]
+    } else if (input$o_mode == "ym") {
+      input$o_ym_range[1]
     } else {
-      d <- filtered_by_airline()
+      input$o_year_range[1]
     }
-    
-    # Update origin
-    df_o <- d |> distinct(ORIGIN, ORIGIN_CITY) |>
-      mutate(label = paste0(ORIGIN_CITY, " (", ORIGIN, ")"))
-    
-    origin_list2 <- setNames(df_o$ORIGIN, df_o$label)
-    
-    updateSelectInput(session, "origin",
-                      choices = c("(Select one)", "All", origin_list2),
-                      selected = if (input$origin %in% df_o$ORIGIN) input$origin else "(Select one)"
-    )
-    
-    # Update dest
-    df_d <- d |> distinct(DEST, DEST_CITY) |>
-      mutate(label = paste0(DEST_CITY, " (", DEST, ")"))
-    
-    dest_list2 <- setNames(df_d$DEST, df_d$label)
-    
-    updateSelectInput(session, "dest",
-                      choices = c("(Select one)", "All", dest_list2),
-                      selected = if (input$dest %in% df_d$DEST) input$dest else "(Select one)"
-    )
   })
   
-  #---- When origin changes → update airline + dest ----
-  observeEvent(input$origin, {
-    # Nếu user chọn All → reset
-    if (input$origin %in% c("(Select one)", "All")) {
-      d <- filtered_by_airline()
+  o_end <- reactive({
+    if (input$o_mode == "date") {
+      input$o_date_range[2]
+    } else if (input$o_mode == "ym") {
+      input$o_ym_range[2]
     } else {
-      d <- filtered_by_origin()
+      input$o_year_range[2]
     }
-    
-    # Airline
-    al2 <- sort(unique(d$AIRLINE))
-    updateSelectInput(session, "airline",
-                      choices = c("(Select one)", "All", al2),
-                      selected = if (input$airline %in% al2) input$airline else "(Select one)"
-    )
-    
-    # Dest
-    df_d <- d |> distinct(DEST, DEST_CITY) |> 
-      mutate(label = paste0(DEST_CITY, " (", DEST, ")"))
-    
-    dest_list2 <- setNames(df_d$DEST, df_d$label)
-    
-    updateSelectInput(session, "dest",
-                      choices = c("(Select one)", "All", dest_list2),
-                      selected = if (input$dest %in% df_d$DEST) input$dest else "(Select one)"
-    )
   })
   
-  #---- When dest changes → update airline + origin ----    
-  observeEvent(input$dest, {
-    if (input$dest %in% c("(Select one)", "All")) {
-      d <- filtered_by_airline()
-    } else {
-      d <- df[df$DEST == input$dest, ]
-    }
-    
-    # airline
-    al2 <- sort(unique(d$AIRLINE))
-    updateSelectInput(session, "airline",
-                      choices = c("(Select one)", "All", al2),
-                      selected = if (input$airline %in% al2) input$airline else "(Select one)"
-    )
-    
-    # origin
-    df_o <- d |> distinct(ORIGIN, ORIGIN_CITY) |>
-      mutate(label = paste0(ORIGIN_CITY, " (", ORIGIN, ")"))
-    
-    origin_list2 <- setNames(df_o$ORIGIN, df_o$label)
-    
-    updateSelectInput(session, "origin",
-                      choices = c("(Select one)", "All", origin_list2),
-                      selected = if (input$origin %in% df_o$ORIGIN) input$origin else "(Select one)"
+  output$o_result <- renderPrint({
+    list(
+      start = o_start(),
+      end   = o_end()
     )
   })
 }

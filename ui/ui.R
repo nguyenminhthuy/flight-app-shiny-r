@@ -15,6 +15,11 @@ ui <- fillPage(
     html, body {
       overflow: auto !important;
     }
+
+    .content, .tab-content, .tab-pane, .container-fluid, .main-panel {
+      overflow: visible !important;
+      height: auto !important;
+    }
   "))
   ),
   
