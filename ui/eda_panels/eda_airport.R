@@ -32,15 +32,57 @@ eda_airport_ui <- function() {
           id = NULL,
           open = c("route"),   # nhóm mở mặc định
           
-          # ==== A. Route Filters ====
           accordion_panel(
-            "Airport/Route Filters", value = "route",
-            selectInput("p_origin", "Origin Airport", choices = c("Select one", "All", "2019")),
-            selectInput("p_dest", "Destination Airport", choices = c("Select one", "All", "2019")),
-            selectInput("p_year", "Year (multi-select)", choices = c("Select one", "All", "2019")),
-            selectInput("p_airline", "Airline", choices = c("Select one", "All", "2019")),
-            selectInput("p_topn", "TopN Selector", choices = c("Select one", "All", "2019")),
-            selectInput("p_route", "Route", choices = c("Select one", "All", "2019"))
+            "Airport Filters", value = "airport",
+            selectInput("p_airline", "Airline (Optional)", choices = airline_choices),
+            selectInput("p_origin", "Origin Airport", choices = origin_choices),
+            selectInput("p_des", "Destination Airport", choices = dest_choices),
+            
+            # Select type of date
+            radioButtons(
+              "p_mode", "Select type:",
+              choices = c("Date" = "date", "Year-Month" = "ym", "Year" = "year"),
+              inline = TRUE
+            ),
+            
+            # Date range
+            conditionalPanel(
+              "input.p_mode == 'date'",
+              dateRangeInput(
+                "p_date_range", "Date range:",
+                start = min_date, end = max_date
+              )
+            ),
+            
+            # Year-month range
+            conditionalPanel(
+              "input.p_mode == 'ym'",
+              sliderTextInput(
+                inputId = "p_ym_range",
+                label = "Year-Month range:",
+                choices = ym_choices,
+                selected = c(ym_choices[1], 
+                             ym_choices[length(ym_choices)]),
+                grid = FALSE
+              )
+            ),
+            
+            # Year range
+            conditionalPanel(
+              "input.p_mode == 'year'",
+              sliderInput(
+                "p_year_range",
+                "Year range:",
+                min = min_year, max = max_year,
+                value = c(min_year, max_year), 
+                sep = "", step = 1
+              )
+            ),
+            
+            verbatimTextOutput("p_result"),
+            
+            selectInput("p_season", "Season", choices = season),
+            
           )
         ),
         br(),

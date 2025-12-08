@@ -33,9 +33,9 @@ eda_overview_ui <- function() {
           open = c("overview"),   # nhóm mở mặc định
           accordion_panel(
             "Overview Filters", value = "overview",
-            selectInput("o_airline", "Airline (Optional)", choices = o_airline_choices),
-            selectInput("o_origin", "Origin Airport", choices = o_origin_choices),
-            selectInput("o_des", "Destination Airport", choices = o_dest_choices),
+            selectInput("o_airline", "Airline (Optional)", choices = airline_choices),
+            selectInput("o_origin", "Origin Airport", choices = origin_choices),
+            selectInput("o_des", "Destination Airport", choices = dest_choices),
             
             # Select type of date
             radioButtons(
@@ -49,7 +49,7 @@ eda_overview_ui <- function() {
               "input.o_mode == 'date'",
               dateRangeInput(
                 "o_date_range", "Date range:",
-                start = o_min_date, end = o_max_date
+                start = min_date, end = max_date
               )
             ),
             
@@ -59,9 +59,9 @@ eda_overview_ui <- function() {
               sliderTextInput(
                 inputId = "o_ym_range",
                 label = "Year-Month range:",
-                choices = o_ym_choices,
-                selected = c(o_ym_choices[1], 
-                             o_ym_choices[length(o_ym_choices)]),
+                choices = ym_choices,
+                selected = c(ym_choices[1], 
+                             ym_choices[length(ym_choices)]),
                 grid = FALSE
               )
             ),
@@ -72,15 +72,15 @@ eda_overview_ui <- function() {
               sliderInput(
                 "o_year_range",
                 "Year range:",
-                min = o_min_year, max = o_max_year,
-                value = c(o_min_year, o_max_year), 
+                min = min_year, max = max_year,
+                value = c(min_year, max_year), 
                 sep = "", step = 1
               )
             ),
             
             verbatimTextOutput("o_result"),
             
-            selectInput("o_season", "Season", choices = o_season),
+            selectInput("o_season", "Season", choices = season),
             
           )
         ),

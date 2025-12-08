@@ -64,7 +64,7 @@ origin_df <- df |>
   mutate(ORIGIN_LABEL = paste0(ORIGIN_CITY, " (", ORIGIN, ")"))
 
 lst_origin <- setNames(origin_df$ORIGIN, origin_df$ORIGIN_LABEL)
-o_origin_choices <- c("(Select one)","All", lst_origin)
+origin_choices <- c("(Select one)","All", lst_origin)
 
 #-----------------------
 dest_df <- df |>
@@ -72,30 +72,30 @@ dest_df <- df |>
   mutate(DEST_LABEL = paste0(DEST_CITY, " (", DEST, ")"))
 
 lst_dest <- setNames(dest_df$DEST, dest_df$DEST_LABEL)
-o_dest_choices <- c("(Select one)","All", lst_dest)
+dest_choices <- c("(Select one)","All", lst_dest)
 
 unique_airlines <- sort(unique(df$AIRLINE))
-o_airline_choices <- c("(Select one)","All", unique_airlines)
+airline_choices <- c("(Select one)","All", unique_airlines)
 
 #-----------------------
 df$FL_DATE <- as.Date(df$FL_DATE)
 
 # min-max date
-o_min_date <- min(df$FL_DATE, na.rm = TRUE)
-o_max_date <- max(df$FL_DATE, na.rm = TRUE)
+min_date <- min(df$FL_DATE, na.rm = TRUE)
+max_date <- max(df$FL_DATE, na.rm = TRUE)
 
 # Year-Month (YYYY-MM)
-o_ym_choices <- seq(o_min_date, o_max_date, by = "month") |>
+ym_choices <- seq(o_min_date, o_max_date, by = "month") |>
   format("%Y-%m")
 
 # Year (numeric)
 unique_years <- sort(unique(as.integer(format(df$FL_DATE, "%Y"))))
-o_min_year <- min(unique_years, na.rm = TRUE)
-o_max_year <- max(unique_years, na.rm = TRUE)
+min_year <- min(unique_years, na.rm = TRUE)
+max_year <- max(unique_years, na.rm = TRUE)
 
 #-----------------------
 unique_seasons <- sort(unique(df$SEASON))
-o_season <- c("(Select one)","All", unique_seasons)
+season <- c("(Select one)","All", unique_seasons)
 
 #-----------------------
 min_dep_delay <- min(df$DEP_DELAY_HOUR, na.rm = TRUE)

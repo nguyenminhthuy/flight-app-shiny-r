@@ -33,14 +33,55 @@ eda_delay_ui <- function() {
           open = c("delay"),   # nhóm mở mặc định
           accordion_panel(
             "Delay Filters", value = "delay",
-            selectInput("d_year", "Year (multi-select)", choices = c("Select one", "All", "2019")),
-            selectInput("d_quarter", "Quarter", choices = c("Select one", "All", "1")),
-            selectInput("d_month", "Month", choices = c("Select one", "All", "1")),
-            selectInput("d_season", "Season", choices = c("Select one", "All", "1")),
-            selectInput("d_airline", "Airline (Optional)", choices = c("Select one", "All", "1")),
-            selectInput("d_origin", "Airport", choices = c("Select one", "All", "1")),
-            selectInput("d_route", "Route / Origin–Dest pair", choices = c("Select one", "All", "1")),
-            selectInput("d_dep_hr", "Delay hour", choices = c("Select one", "All", "1"))
+            selectInput("d_airline", "Airline (Optional)", choices = airline_choices),
+            selectInput("d_origin", "Origin Airport", choices = origin_choices),
+            selectInput("d_des", "Destination Airport", choices = dest_choices),
+            
+            # Select type of date
+            radioButtons(
+              "d_mode", "Select type:",
+              choices = c("Date" = "date", "Year-Month" = "ym", "Year" = "year"),
+              inline = TRUE
+            ),
+            
+            # Date range
+            conditionalPanel(
+              "input.d_mode == 'date'",
+              dateRangeInput(
+                "d_date_range", "Date range:",
+                start = min_date, end = max_date
+              )
+            ),
+            
+            # Year-month range
+            conditionalPanel(
+              "input.d_mode == 'ym'",
+              sliderTextInput(
+                inputId = "d_ym_range",
+                label = "Year-Month range:",
+                choices = ym_choices,
+                selected = c(ym_choices[1], 
+                             ym_choices[length(ym_choices)]),
+                grid = FALSE
+              )
+            ),
+            
+            # Year range
+            conditionalPanel(
+              "input.d_mode == 'year'",
+              sliderInput(
+                "d_year_range",
+                "Year range:",
+                min = min_year, max = max_year,
+                value = c(min_year, max_year), 
+                sep = "", step = 1
+              )
+            ),
+            
+            verbatimTextOutput("d_result"),
+            
+            selectInput("d_season", "Season", choices = season),
+            
           )
         ),
         br(),

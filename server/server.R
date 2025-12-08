@@ -62,24 +62,23 @@ server <- function(input, output, session) {
   })
   
   #==================================
-  range_parsed <- eventReactive(input$o_btn_createPlot, {
+  # EDA Overview
+  #==================================
+  o_range_parsed <- eventReactive(input$o_btn_createPlot, {
     
     if (input$o_mode == "date") {
-      
       list(
         start = input$o_date_range[1],
         end   = input$o_date_range[2]
       )
       
     } else if (input$o_mode == "ym") {
-      
       list(
         start = input$o_ym_range[1],
         end   = input$o_ym_range[2]
       )
       
     } else if (input$o_mode == "year") {
-      
       list(
         start = input$o_year_range[1],
         end   = input$o_year_range[2]
@@ -95,11 +94,120 @@ server <- function(input, output, session) {
       des = input$o_des,
       season = input$o_season,
       mode = input$o_mode,
-      range = range_parsed()
+      range = o_range_parsed()
     )
   })
   
+  #==================================
+  # EDA Airline
+  #==================================
+  a_range_parsed <- eventReactive(input$a_btn_createPlot, {
+    
+    if (input$a_mode == "date") {
+      list(
+        start = input$a_date_range[1],
+        end   = input$a_date_range[2]
+      )
+      
+    } else if (input$a_mode == "ym") {
+      list(
+        start = input$a_ym_range[1],
+        end   = input$a_ym_range[2]
+      )
+      
+    } else if (input$a_mode == "year") {
+      list(
+        start = input$a_year_range[1],
+        end   = input$a_year_range[2]
+      )
+    }
+    
+  })
   
+  output$a_result <- renderPrint({
+    list(
+      airline = input$a_airline,
+      origin = input$a_origin,
+      des = input$a_des,
+      season = input$a_season,
+      mode = input$a_mode,
+      range = a_range_parsed()
+    )
+  })
+  
+  #==================================
+  # EDA Airport
+  #==================================
+  p_range_parsed <- eventReactive(input$p_btn_createPlot, {
+    
+    if (input$p_mode == "date") {
+      list(
+        start = input$p_date_range[1],
+        end   = input$p_date_range[2]
+      )
+      
+    } else if (input$p_mode == "ym") {
+      list(
+        start = input$p_ym_range[1],
+        end   = input$p_ym_range[2]
+      )
+      
+    } else if (input$p_mode == "year") {
+      list(
+        start = input$p_year_range[1],
+        end   = input$p_year_range[2]
+      )
+    }
+    
+  })
+  
+  output$p_result <- renderPrint({
+    list(
+      airline = input$p_airline,
+      origin = input$p_origin,
+      des = input$p_des,
+      season = input$p_season,
+      mode = input$p_mode,
+      range = p_range_parsed()
+    )
+  })
+  
+  #==================================
+  # EDA Delay
+  #==================================
+  d_range_parsed <- eventReactive(input$d_btn_createPlot, {
+    
+    if (input$d_mode == "date") {
+      list(
+        start = input$d_date_range[1],
+        end   = input$d_date_range[2]
+      )
+      
+    } else if (input$d_mode == "ym") {
+      list(
+        start = input$d_ym_range[1],
+        end   = input$d_ym_range[2]
+      )
+      
+    } else if (input$d_mode == "year") {
+      list(
+        start = input$d_year_range[1],
+        end   = input$d_year_range[2]
+      )
+    }
+    
+  })
+  
+  output$d_result <- renderPrint({
+    list(
+      airline = input$d_airline,
+      origin = input$d_origin,
+      des = input$d_des,
+      season = input$d_season,
+      mode = input$d_mode,
+      range = d_range_parsed()
+    )
+  })
 }
 
 
