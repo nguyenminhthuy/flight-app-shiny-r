@@ -72,7 +72,7 @@ server <- function(input, output, session) {
         end   = input$o_date_range[2]
       )
       
-    } else if (input$o_mode == "ym") {
+    } else if (input$o_mode == "year-month") {
       list(
         start = input$o_ym_range[1],
         end   = input$o_ym_range[2]
@@ -87,14 +87,92 @@ server <- function(input, output, session) {
     
   })
   
-  output$o_result <- renderPrint({
-    list(
-      airline = input$o_airline,
+  output$o_result <- renderText({
+    rng <- o_range_parsed()
+    
+    paste0(
+      "📌 Result for Overview Filters\n",
+      "----------------------------------\n",
+      "Origin Airport: ", get_origin_label(input$o_origin), "\n",
+      "Destination Airport: ", get_dest_label(input$o_des), "\n",
+      "Date range: ", rng$start, " → ", rng$end, "\n"
+    )
+  })
+  
+  o_data_grouped <- eventReactive(input$o_btn_createPlot, {
+    
+    overview_flights_overtime(
+      df,
       origin = input$o_origin,
-      des = input$o_des,
-      season = input$o_season,
-      mode = input$o_mode,
-      range = o_range_parsed()
+      #dest = input$o_des,
+      start_date = o_range_parsed()$start,
+      end_date = o_range_parsed()$end,
+      mode = input$o_mode
+    )
+    
+  })
+  
+  output$fig_overview_year <- renderPlotly({
+    plot_flights_bar(o_data_grouped(), 
+                     mode = input$o_mode)
+  })
+  
+  #-------------------------------
+  # Origin Airport <-> Destination Airport
+  #==================================
+  #==================================
+  #---- reactive: filter by o_origin ----
+  filtered_by_origin <- reactive({
+    sel <- input$o_origin
+    if (is.null(sel) || sel %in% c("(Select one)", "All")) return(df)
+    df[df$ORIGIN == sel, ]
+  })
+  
+  filtered_by_dest <- reactive({
+    sel <- input$o_dest
+    if (is.null(sel) || sel %in% c("(Select one)", "All")) return(df)
+    df[df$DEST == sel, ]
+  })
+
+#==================================
+#---- When o_origin changes → update o_dest ----
+  observeEvent(input$o_origin, {
+    d <- filtered_by_origin()
+    
+    df_d <- d |>
+      distinct(DEST, DEST_CITY) |>
+      mutate(label = paste0(DEST_CITY, " (", DEST, ")"))
+    
+    dest_list <- setNames(df_d$DEST, df_d$label)
+    
+    old_val <- isolate(input$o_dest)
+    
+    updateSelectInput(
+      session, "o_dest",
+      choices = c("(Select one)", "All", dest_list),
+      selected = if (!is.null(old_val) && old_val %in% df_d$DEST)
+        old_val else "(Select one)"
+    )
+  })
+
+#==================================
+#---- When o_dest changes → update o_origin ----
+  observeEvent(input$o_dest, {
+    d <- filtered_by_dest()
+    
+    df_o <- d |>
+      distinct(ORIGIN, ORIGIN_CITY) |>
+      mutate(label = paste0(ORIGIN_CITY, " (", ORIGIN, ")"))
+    
+    origin_list <- setNames(df_o$ORIGIN, df_o$label)
+    
+    old_val <- isolate(input$o_origin)
+    
+    updateSelectInput(
+      session, "o_origin",
+      choices = c("(Select one)", "All", origin_list),
+      selected = if (!is.null(old_val) && old_val %in% df_o$ORIGIN)
+        old_val else "(Select one)"
     )
   })
   
@@ -126,10 +204,10 @@ server <- function(input, output, session) {
   
   output$a_result <- renderPrint({
     list(
-      airline = input$a_airline,
+      #airline = input$a_airline,
       origin = input$a_origin,
       des = input$a_des,
-      season = input$a_season,
+      #season = input$a_season,
       mode = input$a_mode,
       range = a_range_parsed()
     )

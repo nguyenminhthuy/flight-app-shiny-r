@@ -21,6 +21,14 @@ eda_overview_ui <- function() {
           transform: scale(1.03) !important;
           transition: 0.15s ease-in-out !important;
         }
+        
+        #fig_overview_year,
+        #fig_overview_year .plotly,
+        #fig_overview_year .js-plotly-plot {
+          opacity: 1 !important;
+          background: transparent !important;
+          filter: none !important;
+        }
       "))
     ),
     # -------- Sidebar --------
@@ -33,14 +41,14 @@ eda_overview_ui <- function() {
           open = c("overview"),   # nhóm mở mặc định
           accordion_panel(
             "Overview Filters", value = "overview",
-            selectInput("o_airline", "Airline (Optional)", choices = airline_choices),
+            #selectInput("o_airline", "Airline (Optional)", choices = airline_choices),
             selectInput("o_origin", "Origin Airport", choices = origin_choices),
             selectInput("o_des", "Destination Airport", choices = dest_choices),
             
             # Select type of date
             radioButtons(
               "o_mode", "Select type:",
-              choices = c("Date" = "date", "Year-Month" = "ym", "Year" = "year"),
+              choices = c("Date" = "date", "Year-Month" = "year-month", "Year" = "year"),
               inline = TRUE
             ),
             
@@ -55,7 +63,7 @@ eda_overview_ui <- function() {
             
             # Year-month range
             conditionalPanel(
-              "input.o_mode == 'ym'",
+              "input.o_mode == 'year-month'",
               sliderTextInput(
                 inputId = "o_ym_range",
                 label = "Year-Month range:",
@@ -76,12 +84,7 @@ eda_overview_ui <- function() {
                 value = c(min_year, max_year), 
                 sep = "", step = 1
               )
-            ),
-            
-            verbatimTextOutput("o_result"),
-            
-            selectInput("o_season", "Season", choices = season),
-            
+            )
           )
         ),
         br(),
@@ -116,7 +119,17 @@ eda_overview_ui <- function() {
           tabPanel(
             title = tagList(icon("chart-line"), "Results"),
             br(),
-            
+            verbatimTextOutput("o_result"),
+            br(),
+            fluidRow(
+              card(plotlyOutput("fig_overview_year"), height = "350px")
+              
+            ),
+            br(),
+            fluidRow(
+              column(6, card(plotlyOutput("fig_overview_year1"), height = "300px")),
+              column(6, card(plotlyOutput("fig_overview_quarterly"), height = "300px"))
+            ),
           )
         )
       )

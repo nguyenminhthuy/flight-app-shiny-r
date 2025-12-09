@@ -119,7 +119,120 @@ plot_flights_dow <- function(df){
 }
 
 #---------------------------------------------
+overview_flights_overtime <- function(df, origin = NULL, start_date, end_date, mode = "date") {
+  
+  # Lọc ORIGIN nếu người dùng chọn
+  if (!is.null(origin) && origin != "" && origin != "All") {
+    df <- df[df$ORIGIN == origin, ]
+  }
+  
+  # if (!is.null(dest) && dest != "" && dest != "All") {
+  #   df <- df[df$DEST == dest, ]
+  # }
+  
+  # Lọc theo FL_DATE
+  
+  # Gom nhóm theo mode
+  if (mode == "date") {
+    df_date <- df[df$FL_DATE >= as.Date(start_date) & 
+               df$FL_DATE <= as.Date(end_date), ]
+    
+    df_group <- df_date |> 
+      group_by(FL_DATE) |> 
+      summarise(Total_Flights = n(), 
+                .groups = "drop")
+    
+  } else if (mode == "year-month") {
+    
+    df$YEAR_MONTH <- format(df$FL_DATE, "%Y-%m")
+    
+    start_date <- substr(start_date, 1, 7)
+    end_date   <- substr(end_date, 1, 7)
+    
+    df_ym <- df[df$YEAR_MONTH >= start_date &
+               df$YEAR_MONTH <= end_date, ]
+    
+    df_group <- df_ym |> 
+      group_by(YEAR_MONTH) |> 
+      summarise(Total_Flights = n(), .groups = "drop")
+    
+  } else if (mode == "year") {
+    
+    df_y <- df[df$YEAR >= start_date &
+               df$YEAR <= end_date, ]
+    
+    df_group <- df_y |> 
+      group_by(YEAR) |> 
+      summarise(Total_Flights = n(), .groups = "drop")
+    
+  } else {
+    stop("mode must be 'date', 'year-month', or 'year'")
+  }
+  
+  return(df_group)
+}
 
+plot_flights_bar <- function(df_group, mode = "date") {
+  
+  if (nrow(df_group) == 0) {
+    return(
+      plot_ly() |> 
+        layout(title = "No data available")
+    )
+  }
+  
+  # DATE ----------------------------------------------------------
+  if (mode == "date") {
+    p <- plot_ly(
+      data = df_group,
+      x = ~FL_DATE,
+      y = ~Total_Flights,
+      type = "scatter",
+      mode = "lines", 
+      line = list(color = "#FF6B35", width = 2),
+      #fill = "tozeroy",
+      fillcolor = "rgba(255, 107, 53)"   # màu cam nhạt
+    ) |> 
+      layout(
+        title = "Daily Flights (Area Chart)",
+        xaxis = list(title = "Date"),
+        yaxis = list(title = "Total Flights")
+      )
+    
+    # YEAR-MONTH ----------------------------------------------------
+  } else if (mode == "year-month") {
+    p <- plot_ly(
+      data = df_group,
+      x = ~YEAR_MONTH,
+      y = ~Total_Flights,
+      type = "bar",
+      color = ~YEAR_MONTH
+    ) |> 
+      layout(
+        xaxis = list(title = "Year-Month"),
+        yaxis = list(title = "Total Flights")
+      )
+    
+    # YEAR ----------------------------------------------------------
+  } else if (mode == "year") {
+    p <- plot_ly(
+      data = df_group,
+      x = ~factor(YEAR),
+      y = ~Total_Flights,
+      type = "bar",
+      color = ~factor(YEAR)
+    ) |> 
+      layout(
+        xaxis = list(title = "Year"),
+        yaxis = list(title = "Total Flights")
+      )
+    
+  } else {
+    stop("mode must be 'date', 'year-month', hoặc 'year'")
+  }
+  
+  return(p)
+}
 
 #---------------------------------------------
 
