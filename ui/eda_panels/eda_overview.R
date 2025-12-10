@@ -43,7 +43,7 @@ eda_overview_ui <- function() {
             "Overview Filters", value = "overview",
             #selectInput("o_airline", "Airline (Optional)", choices = airline_choices),
             selectInput("o_origin", "Origin Airport", choices = origin_choices),
-            selectInput("o_des", "Destination Airport", choices = dest_choices),
+            #selectInput("o_des", "Destination Airport", choices = dest_choices),
             
             # Select type of date
             radioButtons(
@@ -122,14 +122,14 @@ eda_overview_ui <- function() {
             verbatimTextOutput("o_result"),
             br(),
             fluidRow(
-              card(plotlyOutput("fig_overview_year"), height = "350px")
+              card(plotlyOutput("fig_flights_overtime"), height = "350px")
               
             ),
-            br(),
-            fluidRow(
-              column(6, card(plotlyOutput("fig_overview_year1"), height = "300px")),
-              column(6, card(plotlyOutput("fig_overview_quarterly"), height = "300px"))
-            ),
+            # br(),
+            # fluidRow(
+            #   column(6, card(plotlyOutput("fig_top_route"), height = "300px")),
+            #   column(6, card(plotlyOutput("fig_overview_quarterly"), height = "300px"))
+            # ),
           )
         )
       )

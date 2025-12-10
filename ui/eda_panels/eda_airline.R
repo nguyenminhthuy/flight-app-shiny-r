@@ -34,8 +34,8 @@ eda_airline_ui <- function() {
           accordion_panel(
             "Airline Filters", value = "airline",
             selectInput("a_airline", "Airline (Optional)", choices = airline_choices),
-            selectInput("a_origin", "Origin Airport", choices = origin_choices),
-            selectInput("a_des", "Destination Airport", choices = dest_choices),
+            # selectInput("a_origin", "Origin Airport", choices = origin_choices),
+            # selectInput("a_des", "Destination Airport", choices = dest_choices),
             
             # Select type of date
             radioButtons(
@@ -77,11 +77,7 @@ eda_airline_ui <- function() {
                 sep = "", step = 1
               )
             ),
-            
-            verbatimTextOutput("a_result"),
-            
-            selectInput("a_season", "Season", choices = season),
-            
+            #selectInput("a_season", "Season", choices = season),
           )
         ),
         br(),
@@ -99,12 +95,28 @@ eda_airline_ui <- function() {
           type = "tabs",
           
           tabPanel(
-            title = tagList(icon("eye"), "Airline Overview"),
+            title = tagList(icon("chart-line"), "Overview"),
+            br(),
+            verbatimTextOutput("a_result"),
+            br(),
+            fluidRow(
+              card(plotlyOutput("fig_airline_overtime"), height = "300px")
+            ),
+            h4("Growth Rate of an airline vs industry"),
+            h4("Market share over time"),
             br(),
             fluidRow(
               column(6, card(height = "300px")),
               column(6, card(height = "300px"))
             ),
+            h4("on-time vs delay vs cancel"),
+            br(),
+            fluidRow(
+              column(6, card(height = "300px")),
+              column(6, card(height = "300px"))
+            ),
+            h4("Top 5 popular routes"),
+            h4("Route performance of airline"),
             br(),
             fluidRow(
               column(6, card(height = "300px")),

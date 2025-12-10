@@ -112,14 +112,13 @@ server <- function(input, output, session) {
     
   })
   
-  output$fig_overview_year <- renderPlotly({
+  output$fig_flights_overtime <- renderPlotly({
     plot_flights_bar(o_data_grouped(), 
                      mode = input$o_mode)
   })
   
-  #-------------------------------
-  # Origin Airport <-> Destination Airport
   #==================================
+  # Origin Airport <-> Destination Airport
   #==================================
   #---- reactive: filter by o_origin ----
   filtered_by_origin <- reactive({
@@ -204,15 +203,147 @@ server <- function(input, output, session) {
   
   output$a_result <- renderPrint({
     list(
-      #airline = input$a_airline,
-      origin = input$a_origin,
-      des = input$a_des,
-      #season = input$a_season,
+      airline = input$a_airline,
+      # origin = input$a_origin,
+      # des = input$a_des,
+      season = input$a_season,
       mode = input$a_mode,
       range = a_range_parsed()
     )
   })
   
+  output$a_result <- renderText({
+    rng <- a_range_parsed()
+    
+    paste0(
+      "📌 Result for Airline Filters\n",
+      "----------------------------------\n",
+      "Airline: ", input$a_airline, "\n",
+      # "Origin Airport: ", get_origin_label(input$a_origin), "\n",
+      # "Destination Airport: ", get_dest_label(input$a_des), "\n",
+      # "Season: ", input$a_season, "\n",
+      "Date range: ", rng$start, " → ", rng$end, "\n"
+    )
+  })
+  
+    # khi bấm nút create plot
+  airline_grouped <- eventReactive(input$a_btn_createPlot, {
+    
+    d <- df
+    
+    # --- Filter airline ---
+    if (!is.null(input$a_airline) &&
+        input$a_airline != "(Select one)" &&
+        input$a_airline != "All") {
+      
+      d <- d[d$AIRLINE == input$a_airline, ]
+    }
+    
+    # --- Filter season ---
+    if (!is.null(input$a_season) &&
+        input$a_season != "(Select one)" &&
+        input$a_season != "All") {
+      
+      d <- d[d$SEASON == input$a_season, ]
+    }
+    
+    # --- Time filter ---
+    rng <- a_range_parsed()
+    
+    if (input$a_mode == "date") {
+      d <- d[d$FL_DATE >= rng$start & d$FL_DATE <= rng$end, ]
+      
+      d <- d |> 
+        group_by(FL_DATE) |> 
+        summarise(Total_Flights = n())
+      
+    } else if (input$a_mode == "ym") {
+      d <- d[d$YEAR_MONTH >= rng$start & d$YEAR_MONTH <= rng$end, ]
+      
+      d <- d |> 
+        group_by(YEAR_MONTH) |> 
+        summarise(Total_Flights = n())
+      
+    } else if (input$a_mode == "year") {
+      d <- d[d$YEAR >= rng$start & d$YEAR <= rng$end, ]
+      
+      d <- d |> 
+        group_by(YEAR) |> 
+        summarise(Total_Flights = n())
+    }
+    
+    d
+  })
+  
+  output$fig_airline_overtime <- renderPlotly({
+    df_group <- airline_grouped()
+    
+    if (nrow(df_group) == 0) {
+      return(plot_ly() |> layout(title = "No data available"))
+    }
+      
+    if (input$a_mode == "date") {
+      plot_airline_overtime(df_group, "FL_DATE", "Date", "Flights Over Time")
+      
+    } else if (input$a_mode == "ym") {
+      plot_airline_overtime(df_group, "YEAR_MONTH", "Year-Month", "Monthly Flights")
+      
+    } else if (input$a_mode == "year") {
+      plot_airline_overtime(df_group, "YEAR", "Year", "Yearly Flights")
+    }
+  })
+  #==================================
+  airline_filtered <- eventReactive(input$a_btn_createPlot, {
+    d <- df
+    
+    # --- Filter airline ---
+    if (!is.null(input$a_airline) &&
+        input$a_airline != "(Select one)" &&
+        input$a_airline != "All") {
+      d <- d[d$AIRLINE == input$a_airline, ]
+    }
+    
+    # --- Filter season ---
+    if (!is.null(input$a_season) &&
+        input$a_season != "(Select one)" &&
+        input$a_season != "All") {
+      d <- d[d$SEASON == input$a_season, ]
+    }
+    
+    # --- Time filter ---
+    rng <- a_range_parsed()
+    
+    if (input$a_mode == "date") {
+      d <- d[d$FL_DATE >= rng$start & d$FL_DATE <= rng$end, ]
+      
+    } else if (input$a_mode == "ym") {
+      d <- d[d$YEAR_MONTH >= rng$start & d$YEAR_MONTH <= rng$end, ]
+      
+    } else if (input$a_mode == "year") {
+      d <- d[d$YEAR >= rng$start & d$YEAR <= rng$end, ]
+    }
+    
+    d  # still contains ARR_DELAY + CANCELLED
+  })
+  
+  output$fig_airline_rate <- renderPlotly({
+    df_group <- airline_grouped()
+    if (nrow(df_group) == 0) {
+      return(plot_ly() |> layout(title = "No data available"))
+    }
+    if (input$a_mode == "date") {
+      df_rate <- compute_rate(df_group, "FL_DATE")
+      plot_airline_rate(df_rate, "FL_DATE", "Date")
+      
+    } else if (input$a_mode == "ym") {
+      df_rate <- compute_rate(df_group, "YEAR_MONTH")
+      plot_airline_rate(df_rate, "YEAR_MONTH", "Year-Month")
+      
+    } else if (input$a_mode == "year") {
+      df_rate <- compute_rate(df_group, "YEAR")
+      plot_airline_rate(df_rate, "YEAR", "Year")
+    }
+  })
   #==================================
   # EDA Airport
   #==================================

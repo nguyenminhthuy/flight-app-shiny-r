@@ -126,10 +126,6 @@ overview_flights_overtime <- function(df, origin = NULL, start_date, end_date, m
     df <- df[df$ORIGIN == origin, ]
   }
   
-  # if (!is.null(dest) && dest != "" && dest != "All") {
-  #   df <- df[df$DEST == dest, ]
-  # }
-  
   # Lọc theo FL_DATE
   
   # Gom nhóm theo mode
@@ -235,6 +231,29 @@ plot_flights_bar <- function(df_group, mode = "date") {
 }
 
 #---------------------------------------------
+plot_airline_overtime <- function(df, x_col, xaxis_label, plot_title) {
+  
+  plot_ly(
+    data = df,
+    x = ~get(x_col),
+    y = ~Total_Flights,
+    type = "bar",
+    color = ~get(x_col),       # đẹp và tự đổi theo category
+    #legendgroup = ~get(x_col),
+    showlegend = FALSE         # tắt legend
+  ) |>
+    layout(
+      title = plot_title,
+      xaxis = list(type = "category", title = xaxis_label),
+      yaxis = list(title = "Total Flights"),
+      showlegend = FALSE
+    ) |>
+    config(responsive = TRUE)
+}
+
+#---------------------------------------------
+
+
 
 
 
